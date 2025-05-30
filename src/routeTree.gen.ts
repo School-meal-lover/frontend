@@ -12,12 +12,33 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as MenuIndexImport } from './routes/menu/index'
+import { Route as MenuRakrakImport } from './routes/menu/rakrak'
+import { Route as MenuCongestionImport } from './routes/menu/congestion'
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MenuIndexRoute = MenuIndexImport.update({
+  id: '/menu/',
+  path: '/menu/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MenuRakrakRoute = MenuRakrakImport.update({
+  id: '/menu/rakrak',
+  path: '/menu/rakrak',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MenuCongestionRoute = MenuCongestionImport.update({
+  id: '/menu/congestion',
+  path: '/menu/congestion',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -32,6 +53,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/menu/congestion': {
+      id: '/menu/congestion'
+      path: '/menu/congestion'
+      fullPath: '/menu/congestion'
+      preLoaderRoute: typeof MenuCongestionImport
+      parentRoute: typeof rootRoute
+    }
+    '/menu/rakrak': {
+      id: '/menu/rakrak'
+      path: '/menu/rakrak'
+      fullPath: '/menu/rakrak'
+      preLoaderRoute: typeof MenuRakrakImport
+      parentRoute: typeof rootRoute
+    }
+    '/menu/': {
+      id: '/menu/'
+      path: '/menu'
+      fullPath: '/menu'
+      preLoaderRoute: typeof MenuIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +81,47 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/menu/congestion': typeof MenuCongestionRoute
+  '/menu/rakrak': typeof MenuRakrakRoute
+  '/menu': typeof MenuIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/menu/congestion': typeof MenuCongestionRoute
+  '/menu/rakrak': typeof MenuRakrakRoute
+  '/menu': typeof MenuIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/menu/congestion': typeof MenuCongestionRoute
+  '/menu/rakrak': typeof MenuRakrakRoute
+  '/menu/': typeof MenuIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/menu/congestion' | '/menu/rakrak' | '/menu'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/menu/congestion' | '/menu/rakrak' | '/menu'
+  id: '__root__' | '/' | '/menu/congestion' | '/menu/rakrak' | '/menu/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MenuCongestionRoute: typeof MenuCongestionRoute
+  MenuRakrakRoute: typeof MenuRakrakRoute
+  MenuIndexRoute: typeof MenuIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MenuCongestionRoute: MenuCongestionRoute,
+  MenuRakrakRoute: MenuRakrakRoute,
+  MenuIndexRoute: MenuIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +134,23 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/menu/congestion",
+        "/menu/rakrak",
+        "/menu/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/menu/congestion": {
+      "filePath": "menu/congestion.tsx"
+    },
+    "/menu/rakrak": {
+      "filePath": "menu/rakrak.tsx"
+    },
+    "/menu/": {
+      "filePath": "menu/index.tsx"
     }
   }
 }

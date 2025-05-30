@@ -1,13 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  component: RouteComponent,
+  loader: () => {
+    throw redirect({
+      to: "/menu"
+    });
+  },
 });
-
-function RouteComponent() {
-  return (
-    <div>
-      <h2 className="text-2xl font-bold">Hello, world!</h2>
-    </div>
-  );
-}
