@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import React, {useState} from "react";
+import {useState} from "react";
 
 export const Route = createFileRoute("/menu/")({
   component: RouteComponent,
