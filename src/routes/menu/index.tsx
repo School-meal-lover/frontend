@@ -20,7 +20,7 @@ function Header() {
           <Link to='/menu/congestion' className="hover:text-orange-500 transition">
             혼잡도
           </Link>
-          <Link to='/' className="hover:text-orange-500 transition">
+          <Link to='/menu/congestion' className="hover:text-orange-500 transition">
             Team 학사모
           </Link>
         </nav>
@@ -35,7 +35,7 @@ function Body(){
     <div className="w-full my-5 flex justify-center">
         <div className="w-[1000px]">
             <div className="w-[800px] m-auto">
-                <p className="py-[16.75px] m-0 font-bold text-center text-[25px]">2025 5월 첫째주</p>
+                <p className="py-[16.75px] m-0 font-bold text-center text-[25px]">2025 5월 넷째주</p>
                 <DaySelector />
                 <PlaceSelector />
                 <Menu />
@@ -49,28 +49,42 @@ function Menu(){
     return(
         <div className="my-[65px] flex items-center gap-[61px] font-bold">
             <div className="flex-1 justify-center">
-                <div className="flex flex-1 bg-[#FF8940] text-white items-center justify-center rounded-[8px] h-10">
+                <div className="flex flex-1 items-center justify-center border border-[#B7B7B7] rounded-[8px] h-10">
                     아침
                 </div>
                 <div className="my-4 h-[452px] flex flex-col">
-                    <div className="flex flex-1 items-center justify-center bg-[#FFC19B] border border-[#FF8940] rounded-[10px]">
-                        일품 메뉴
+                    <div className="flex flex-1 items-center justify-center border border-[#FF8940] rounded-[10px] text-[14px]">
+                        -
                     </div>
-                    <div className="my-[10px] flex flex-1 items-center justify-center bg-[#E6E6E6] border border-[#B7B7B7] rounded-[10px]">
-                        일반 메뉴
+                    <div className="my-[10px] flex flex-col flex-1 items-center justify-center border border-[#B7B7B7] rounded-[10px] text-[14px]">
+                        <p>흑미밥</p>
+                        <p>건새우미역국</p>
+                        <p>계란찜</p>
+                        <p>닭떡볶음</p>
+                        <p>숙주나물</p>
+                        <p>배추김치</p>
+                        <p>시리얼*우유</p>
+                        <p>토스트*잼</p>
+                        <p>야채샐러드*D</p>
                     </div>
                 </div>
             </div>
             <div className="flex-1 justify-center">
-                <div className="flex flex-1 items-center justify-center border border-[#B7B7B7] rounded-[8px] h-10">
+                <div className="flex flex-1 bg-[#FF8940] text-white items-center justify-center rounded-[8px] h-10">
                     점심
                 </div>
                 <div className="my-4 h-[452px] flex flex-col">
-                    <div className="flex flex-1 items-center justify-center border border-[#FF8940] rounded-[10px]">
-                        일품 메뉴
+                    <div className="flex flex-1 flex-col items-center justify-center bg-[#FFC19B] border border-[#FF8940] rounded-[10px] text-[14px]">
+                        <p>참치새싹비빔밥</p>
+                        <p>갈비제육볶음/상추쌈</p>
                     </div>
-                    <div className="my-[10px] flex flex-1 items-center justify-center border border-[#B7B7B7] rounded-[10px]">
-                        일반 메뉴
+                    <div className="my-[10px] flex flex-1 flex-col items-center justify-center bg-[#E6E6E6] border border-[#B7B7B7] rounded-[10px] text-[14px]">
+                        <p>흑미밥</p>
+                        <p>건새우미역국</p>
+                        <p>파인함박스테이크</p>
+                        <p>돈육잡채</p>
+                        <p>상추겉절이</p>
+                        <p>배추김치</p>
                     </div>
                 </div>
             </div>
@@ -79,14 +93,20 @@ function Menu(){
                     저녁
                 </div>
                 <div className="my-4 h-[452px] flex flex-col">
-                    <div className="flex flex-1 items-center justify-center border border-[#FF8940] rounded-[10px]">
-                        일품 메뉴
+                    <div className="flex flex-1 flex-col items-center justify-center border border-[#FF8940] rounded-[10px] text-[14px]">
+                        -
                     </div>
-                    <div className="my-[10px] flex flex-1 items-center justify-center border border-[#B7B7B7] rounded-[10px]">
-                        일반 메뉴
+                    <div className="my-[10px] flex flex-1 flex-col items-center justify-center border border-[#B7B7B7] rounded-[10px] text-[14px]">
+                        <p>흑미밥</p>
+                        <p>부대찌개/라면</p>
+                        <p>들깨순대찜/초장</p>
+                        <p>동그랑땡전</p>
+                        <p>애호박버섯볶음</p>
+                        <p>배추김치</p>
                     </div>
                 </div>
             </div>
+           
         </div>
     )
 }
