@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from "react";
 
-export const Route = createFileRoute('/menu/rakrak')({
+export const Route = createFileRoute('/menu/lacklack')({
   component: RouteComponent,
 })
 
@@ -17,7 +17,7 @@ function Sidebar({selectedCategory, setSelectedCategory}: SidebarProps){
     const categories = ["찌개 / 라면", "돈가스 / 밥", "음료수", "도너츠", "특별메뉴"]
     
     return(
-        <div className="w-[268px] shadow-xl">
+        <div className="w-[268px] shadow">
             <div className="py-15 flex flex-col items-center justify-center gap-4">
                 {categories.map(cat => (
                     <div
@@ -62,7 +62,7 @@ function Category({selectedCategory}:CategoryProps){
 
     const menuData = allMenuData.filter(item => item.category === selectedCategory)
     return(
-       <div className="mx-15 my-10 flex-1">
+       <div className="px-15 py-10 flex-1 bg-[#F8F4F1]">
             <h1 className="font-bold text-[25px]">락락 메뉴 &gt; {selectedCategory}</h1>
             <div className="my-[29px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
                 {menuData.map((item, index) => (

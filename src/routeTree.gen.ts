@@ -13,8 +13,9 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as MenuIndexImport } from './routes/menu/index'
-import { Route as MenuRakrakImport } from './routes/menu/rakrak'
+import { Route as MenuLacklackImport } from './routes/menu/lacklack'
 import { Route as MenuCongestionImport } from './routes/menu/congestion'
+import { Route as MenuDateImport } from './routes/menu/$date'
 
 // Create/Update Routes
 
@@ -30,15 +31,21 @@ const MenuIndexRoute = MenuIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const MenuRakrakRoute = MenuRakrakImport.update({
-  id: '/menu/rakrak',
-  path: '/menu/rakrak',
+const MenuLacklackRoute = MenuLacklackImport.update({
+  id: '/menu/lacklack',
+  path: '/menu/lacklack',
   getParentRoute: () => rootRoute,
 } as any)
 
 const MenuCongestionRoute = MenuCongestionImport.update({
   id: '/menu/congestion',
   path: '/menu/congestion',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MenuDateRoute = MenuDateImport.update({
+  id: '/menu/$date',
+  path: '/menu/$date',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,6 +60,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/menu/$date': {
+      id: '/menu/$date'
+      path: '/menu/$date'
+      fullPath: '/menu/$date'
+      preLoaderRoute: typeof MenuDateImport
+      parentRoute: typeof rootRoute
+    }
     '/menu/congestion': {
       id: '/menu/congestion'
       path: '/menu/congestion'
@@ -60,11 +74,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MenuCongestionImport
       parentRoute: typeof rootRoute
     }
-    '/menu/rakrak': {
-      id: '/menu/rakrak'
-      path: '/menu/rakrak'
-      fullPath: '/menu/rakrak'
-      preLoaderRoute: typeof MenuRakrakImport
+    '/menu/lacklack': {
+      id: '/menu/lacklack'
+      path: '/menu/lacklack'
+      fullPath: '/menu/lacklack'
+      preLoaderRoute: typeof MenuLacklackImport
       parentRoute: typeof rootRoute
     }
     '/menu/': {
@@ -81,46 +95,62 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
-  '/menu/rakrak': typeof MenuRakrakRoute
+  '/menu/lacklack': typeof MenuLacklackRoute
   '/menu': typeof MenuIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
-  '/menu/rakrak': typeof MenuRakrakRoute
+  '/menu/lacklack': typeof MenuLacklackRoute
   '/menu': typeof MenuIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
-  '/menu/rakrak': typeof MenuRakrakRoute
+  '/menu/lacklack': typeof MenuLacklackRoute
   '/menu/': typeof MenuIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/menu/congestion' | '/menu/rakrak' | '/menu'
+  fullPaths:
+    | '/'
+    | '/menu/$date'
+    | '/menu/congestion'
+    | '/menu/lacklack'
+    | '/menu'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/menu/congestion' | '/menu/rakrak' | '/menu'
-  id: '__root__' | '/' | '/menu/congestion' | '/menu/rakrak' | '/menu/'
+  to: '/' | '/menu/$date' | '/menu/congestion' | '/menu/lacklack' | '/menu'
+  id:
+    | '__root__'
+    | '/'
+    | '/menu/$date'
+    | '/menu/congestion'
+    | '/menu/lacklack'
+    | '/menu/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MenuDateRoute: typeof MenuDateRoute
   MenuCongestionRoute: typeof MenuCongestionRoute
-  MenuRakrakRoute: typeof MenuRakrakRoute
+  MenuLacklackRoute: typeof MenuLacklackRoute
   MenuIndexRoute: typeof MenuIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MenuDateRoute: MenuDateRoute,
   MenuCongestionRoute: MenuCongestionRoute,
-  MenuRakrakRoute: MenuRakrakRoute,
+  MenuLacklackRoute: MenuLacklackRoute,
   MenuIndexRoute: MenuIndexRoute,
 }
 
@@ -135,19 +165,23 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/menu/$date",
         "/menu/congestion",
-        "/menu/rakrak",
+        "/menu/lacklack",
         "/menu/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/menu/$date": {
+      "filePath": "menu/$date.tsx"
+    },
     "/menu/congestion": {
       "filePath": "menu/congestion.tsx"
     },
-    "/menu/rakrak": {
-      "filePath": "menu/rakrak.tsx"
+    "/menu/lacklack": {
+      "filePath": "menu/lacklack.tsx"
     },
     "/menu/": {
       "filePath": "menu/index.tsx"

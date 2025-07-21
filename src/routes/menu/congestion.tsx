@@ -6,7 +6,7 @@ export const Route = createFileRoute('/menu/congestion')({
 
 function RouteComponent() {
   return(
-    <div className="flex justify-center">
+    <div className="flex justify-center bg-[#F8F4F1]">
         <img src="../Frame 33.svg" />
     </div>
   )
