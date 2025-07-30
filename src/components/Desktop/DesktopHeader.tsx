@@ -14,7 +14,9 @@ const DesktopHeader = () => {
   return(
   <header className="w-full h-[50px] px-4 py-2 shadow flex items-center justify-between relative">
     <div className="flex flex-1">
-      <img alt="꼬르륵 로고" src="../Frame 38.svg" />
+      <Link to='/' onClick={() => setSelectedNav("학식 메뉴")}>
+        <img alt="꼬르륵 로고" src="../Frame 38.svg" />
+      </Link>
       {navList.map((nav) => (
         <div className={`flex flex-1 justify-evenly items-center font-bold text-[14px] lg:text-[18px]
         ${selectedNav === nav.name ? "text-orange-500" : ""}`}>
