@@ -1,13 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import dayjs from "dayjs";
 
 export const Route = createFileRoute("/")({
-  component: RouteComponent,
+  loader: () => {
+    const today = dayjs();
+    throw redirect({
+      to: "/menu/$date",
+      params: {date: today.format("YYYY-MM-DD")},
+    });
+  },
 });
-
-function RouteComponent() {
-  return (
-    <div>
-      <h2 className="text-2xl font-bold">Hello, world!</h2>
-    </div>
-  );
-}
