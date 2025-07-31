@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 
 const navList = [
   { name: "학식 메뉴", link: "/" },
+  { name: "락락 메뉴", link: "/menu/lacklack"},
   { name: "식당 혼잡도", link: "/menu/congestion" },
   { name: "Team 학사모", link: "/menu/congestion" },
 ];
@@ -55,7 +56,7 @@ export default function MobileHeader() {
               setSelected(nav.name);
               setMenuOpen(false);
             }}
-            className={`w-full text-left px-6 py-4 my-1 font-bold rounded-xl text-lg cursor-pointer ${
+            className={`w-full text-left px-6 py-3 my-1 font-bold rounded-xl text-lg cursor-pointer ${
               selected === nav.name
                 ? "bg-[#FF8940] text-white"
                 : "text-black hover:bg-[#FF8940] hover:text-white transition duration-300"
