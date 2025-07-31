@@ -1,5 +1,6 @@
 import { useNavigate} from '@tanstack/react-router'
 import dayjs from "dayjs";
+import "dayjs/locale/ko";
 import axios from "axios";
 import React, {useState, useEffect, useMemo} from 'react';
 
@@ -26,13 +27,7 @@ const getWeekDates = (baseDate: Date, weekOffset: number = 0): Date[] => {
 //-----------------------------------
 interface DateNavigatorProps{
   baseDate: Date;
-  weekOffset: number;
-  setWeekOffset: React.Dispatch<React.SetStateAction<number>>;
-}
-
-interface DateSelectorProps{
-  baseDate: Date;
-  weekOffset: number;
+  setBaseDate: React.Dispatch<React.SetStateAction<Date>>;
 }
 
 interface MenuDisplayProps{
@@ -101,19 +96,16 @@ interface Props {
 
 //-----------------------------📌RouteComponent📌-----------------------------
 export default function MobileDate({date} : Props) {
-  const [weekOffset, setWeekOffset] = useState(0);
   const [baseDate, setBaseDate] = useState(dayjs(date).toDate());
 
   //baseDate param 바뀔 때마다 date, weekOffset 값 동기화
   useEffect( () => {
     setBaseDate(dayjs(date).toDate());
-    setWeekOffset(0); 
   }, [date])
 
   return(
     <div className="bg-[#F8F4F1] p-7">
-      <DateNevigator baseDate={baseDate} weekOffset={weekOffset} setWeekOffset={setWeekOffset}/>
-      <DateSelector baseDate={baseDate} weekOffset={weekOffset} />
+      <DateNevigator baseDate={baseDate} setBaseDate={setBaseDate} />
       <MenuDisplay date={date} />
     </div>
   )
@@ -121,89 +113,33 @@ export default function MobileDate({date} : Props) {
 
 //-----------------------------🔥DateNeviagtor🔥-----------------------------
 //화살표로 빠르게 주(week) 이동하는 Component
-function DateNevigator({baseDate, weekOffset, setWeekOffset}: DateNavigatorProps) {
-  const weekDates = getWeekDates(baseDate, weekOffset);
-  const monday = weekDates[0];
-  const friday = weekDates[4];
+function DateNevigator({baseDate, setBaseDate}: DateNavigatorProps) {
+  //한글 로케일 설정
+  dayjs.locale("ko");
   const navigate = useNavigate();
-
   //날짜 formatting
   const formatKoreanDate = (date: Date): string => {
-    return dayjs(date).format("YYYY년 MM월 DD일")
+    return dayjs(date).format("YYYY년 MM월 DD일 (dd)")
+  };
+  //화살표 누름에 따라 +/- 1일 하는 함수
+  const handleDayChange = (direction: number) => {
+    const newDate = dayjs(baseDate).add(direction, "day").toDate();
+    setBaseDate(newDate);
+
+    navigate({to: "/menu/$date", params: {date: dayjs(newDate).format("YYYY-MM-DD")}})
   };
 
-  const handleWeekChange = (direction: number) => {
-    const newWeekOffset = weekOffset + direction;
-    setWeekOffset(newWeekOffset);
-
-    const weekDates = getWeekDates(baseDate, newWeekOffset);
-    const newMonday = dayjs(weekDates[0]).format("YYYY-MM-DD")
-    
-    navigate({to: "/menu/$date", params: {date: newMonday}});
-  }
-
-  return (
+  return(
     <div className="flex items-center justify-center gap-4 bg-[#F8F4F1] p-4">
-      <img className="hover:brightness-95 transition" alt="leftArrow" src="../public/leftArrow.svg" 
-      onClick={() => handleWeekChange(-1)} />
-      <span className="text-2xl font-bold min-w-[320px] text-center">
-        {formatKoreanDate(monday)} - {`${monday.getMonth() === friday.getMonth() ? '' : `${friday.getMonth() + 1}월 `}${friday.getDate()}일`}
+      <img className="hover:brightness-95 transition" alt="leftArrow" src="../public/leftArrow.svg"
+      onClick={() => handleDayChange(-1)}  />
+      <span className="text-2xl font-bold text-center">
+        {formatKoreanDate(baseDate)}
       </span>
-      <img className="hover:brightness-95 transition" alt="rightArrow" src="../public/rightArrow.svg" 
-      onClick={() => handleWeekChange(1)} />
+      <img className="hover:brightness-95 transition" alt="rightArrow" src="../public/rightArrow.svg"
+      onClick={() => handleDayChange(1)} />
     </div>
-  );
-}
-
-
-//-----------------------------🔥DateSelector🔥-----------------------------
-//금주 월~금 선택할 수 있는 Component
-function DateSelector({baseDate, weekOffset} : DateSelectorProps){
-  const weekDates = getWeekDates(baseDate, weekOffset);
-  const [daySelected, setDaySelected] = useState(baseDate);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setDaySelected(baseDate);
-  }, [baseDate])
-
-  //날짜 formatting
-  const formatDate= (date: Date): string => {
-    return dayjs(date).format("DD")
-  }
-
-  //월~금 객체 배열
-  const days = [
-    {date: weekDates[0], day: "월"},
-    {date: weekDates[1], day: "화"},
-    {date: weekDates[2], day: "수"},
-    {date: weekDates[3], day: "목"},
-    {date: weekDates[4], day: "금"},
-  ]
-
-  const handleDayChange = (date: Date) => {
-    setDaySelected(date);
-    const newDate = dayjs(date).format("YYYY-MM-DD")
-
-    navigate({to: "/menu/$date", params: {date: newDate}})
-  }
-
-  return (
-    <div className="m-4 flex justify-center items-center">
-      <div className="flex rounded-[12px] border border-[#B7B7B7] w-[432px] h-[102px] gap-2 bg-white">
-        {days.map( (day) => (
-         <div 
-         key={formatDate(day.date)} 
-         onClick={() => handleDayChange(day.date)}
-         className={`flex flex-col flex-1 items-center justify-center px-4 py-2 cursor-pointer transition-all duration-300 font-bold
-              ${formatDate(daySelected) === formatDate(day.date) ? "bg-[#FF8940] text-white rounded-[10px] shadow-md" : "text-[#757575]"}`}>
-              <div className="text-[18px]">{formatDate(day.date)}</div>
-              <div className="text-[18px]">{day.day}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  )
 }
 
 //-----------------------------🔥MenuDisplay🔥-----------------------------
@@ -213,6 +149,12 @@ function MenuDisplay({date} : MenuDisplayProps){
   const [secondMenuData, setSecondMenuData] = useState<MenuData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedRestaurant, setSelectedRestaurant] = useState<number>(1);
+
+  const restaurants = [
+    {name: "제1 학생식당", number: 1},
+    {name: "제2 학생식당", number: 2}
+  ]
 
   const mondayStr = useMemo(() => {
     const monday = getWeekDates(dayjs(date).toDate())[0];
@@ -257,9 +199,18 @@ function MenuDisplay({date} : MenuDisplayProps){
   // 이후 dayData.meals["breakfast"].menu_items 로 각 메뉴별(객체) 저장 배열 만들어서 보여주면 될 듯
   return(
     <div>
-      <p>
-        
-      </p>
+      {/* 식당 선택 div */}
+      <div className="flex justify-center items-center">
+        {restaurants.map( (restaurant) => (
+          <div className={`px-12 py-2 border-b-2 font-semibold hover:cursor-pointer
+          ${selectedRestaurant === restaurant.number ? "border-orange-500 text-orange-500" : "border-gray-300"}`}
+          onClick={() => setSelectedRestaurant(restaurant.number)}>
+            {restaurant.name}
+          </div>
+        ))}
+      </div>
+      {/* 조식, 중식, 석식 담는 div */}
+      
     </div>
   )
 }
