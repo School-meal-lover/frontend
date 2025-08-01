@@ -62,7 +62,7 @@ function Category({selectedCategory}:CategoryProps){
     return(
        <div className="px-15 py-10 flex-1 bg-[#F8F4F1]">
             <h1 className="font-bold text-[25px]">락락 메뉴 &gt; {selectedCategory}</h1>
-            <div className="my-[29px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+            <div className="my-[30px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
                 {menuData.map((item, index) => (
                     <div key={index} className="border border-[#B7B7B7] rounded-[10px] shadow-xl p-4">
                         <div className="w-full h-60">

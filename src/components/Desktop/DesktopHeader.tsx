@@ -12,7 +12,7 @@ const DesktopHeader = () => {
 ];
 
   return(
-  <header className="w-full h-[50px] px-4 py-2 shadow flex items-center justify-between relative">
+  <header className="w-full h-[55px] px-4 py-2 shadow flex items-center justify-between relative">
     <div className="flex flex-1">
       <Link to='/' onClick={() => setSelectedNav("학식 메뉴")}>
         <img alt="꼬르륵 로고" src="../Frame 38.svg" />

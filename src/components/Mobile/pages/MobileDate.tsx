@@ -191,7 +191,7 @@ function MenuDisplay({ date }: MenuDisplayProps) {
         {restaurants.map((restaurant) => (
           <div
             key={restaurant.number}
-            className={`text-center py-2 border-b-2 font-semibold hover:cursor-pointer w-full
+            className={`text-center py-2 border-b-2 font-semibold hover:cursor-pointer w-full transition duration-200
             ${selectedRestaurant === restaurant.number ? "border-orange-500 text-orange-500" : "border-gray-300"}`}
             onClick={() => setSelectedRestaurant(restaurant.number)}
           >

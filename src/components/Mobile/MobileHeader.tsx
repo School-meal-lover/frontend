@@ -13,7 +13,7 @@ export default function MobileHeader() {
   const [selected, setSelected] = useState("학식 메뉴");
 
   return (
-    <header className="w-full h-[50px] px-4 py-2 shadow relative flex items-center justify-between z-50 bg-white">
+    <header className="w-full h-[55px] px-4 py-2 shadow relative flex items-center justify-between z-50 bg-white">
       {/* 상단 navigation bar */}
       <div className="flex items-center">
         <Link to="/">
