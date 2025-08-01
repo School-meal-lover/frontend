@@ -203,7 +203,7 @@ function MenuDisplay({ date }: MenuDisplayProps) {
       {/* 조식 div */}
       <div className="border border-orange-500 rounded-xl mb-10">
         <div className="bg-[#FFB080] rounded-t-xl flex items-center p-4">
-          <img alt="조식" src="/breakfast.svg" />
+          <img alt="조식" src="/logoBreakfast.svg" />
           <span className="font-bold px-1">조식</span>
           <span className="flex-1">(08:00-09:00)</span>
           <span className="font-semibold">1,000원</span>
@@ -235,7 +235,7 @@ function MenuDisplay({ date }: MenuDisplayProps) {
       {/* 중식 div */}
       <div className="border border-orange-500 rounded-xl mb-10">
         <div className="bg-[#FFB080] rounded-t-xl flex items-center p-4">
-          <img alt="조식" src="/lunch.svg" />
+          <img alt="조식" src="/logoLunch.svg" />
           <span className="font-bold px-1">중식</span>
           <span className="flex-1">(11:30-13:30)</span>
           <span className="font-semibold">5,500원</span>
@@ -277,7 +277,7 @@ function MenuDisplay({ date }: MenuDisplayProps) {
       {/* 석식 div */}
       <div className="border border-orange-500 rounded-xl mb-10">
         <div className="bg-[#FFB080] rounded-t-xl flex items-center p-4">
-          <img alt="조식" src="/dinner.svg" />
+          <img alt="조식" src="/logoDinner.svg" />
           <span className="font-bold px-1">석식</span>
           <span className="flex-1">(17:00-18:30)</span>
           <span className="font-semibold">5,500원</span>

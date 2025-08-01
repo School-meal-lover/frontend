@@ -20,7 +20,7 @@ function Sidebar({selectedCategory, setSelectedCategory}: SidebarProps){
                 {categories.map(cat => (
                     <div
                     key={cat}
-                    className={`w-[228px] h-10 flex items-center rounded-[8px] px-5 shadow-lg font-bold transition
+                    className={`w-[228px] h-10 flex items-center rounded-[8px] px-5 shadow-lg font-bold transition hover:cursor-pointer
                         ${selectedCategory === cat
                         ? "bg-[#FF8940] text-white shadow-lg"
                         : "text-[#252525] hover:bg-[#FF8940] hover:text-white"
