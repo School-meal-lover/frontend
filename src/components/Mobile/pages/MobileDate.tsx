@@ -173,7 +173,6 @@ function MenuDisplay({ date }: MenuDisplayProps) {
         setLoading(false);
       }
     };
-
     fetchMenu();
   }, [date]);
 
