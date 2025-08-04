@@ -1,1 +1,8 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css");
+
 @import "tailwindcss";
+
+/* 전역 폰트 설정 */
+body {
+    font-family: 'Pretendard', sans-serif;
+}

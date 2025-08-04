@@ -7,25 +7,11 @@ const FIRST_RESTAURANT = "6dd9a55b-1202-4073-a875-0bb79f57a3b0";
 const SECOND_RESTAURANT = "860be56e-fbf2-4a8e-b5e3-8c8f151d8b21";
 // const LACK_LACK = "e4f67cd4-eebd-467e-a0e9-e718d3b056ed"; 
 
-// params로 받아온 날짜 기준으로 해당 주의 월~금 날짜 배열 return
-const getWeekDates = (baseDate: Date, weekOffset: number = 0): Date[] => {
-  const day = baseDate.getDay(); // 0: 일요일, 1: 월요일, ...
-  const monday = new Date(baseDate);
-  monday.setDate(baseDate.getDate() - (day === 0 ? 6 : day - 1) + weekOffset * 7);
-
-  const weekDates = [];
-  for (let i = 0; i < 5; i++) {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
-    weekDates.push(d);
-  }
-  return weekDates;
-};
 
 //🎯 interface 선언
 //-----------------------------------
 interface DateNavigatorProps{
-  baseDate: Date;
+  baseDate: Date;  
   weekOffset: number;
   setWeekOffset: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -98,6 +84,20 @@ interface Props {
 }
 //-----------------------------------
 
+// params로 받아온 날짜 기준으로 해당 주의 월~금 날짜 배열 return
+const getWeekDates = (baseDate: Date, weekOffset: number = 0): Date[] => {
+  const day = baseDate.getDay(); // 0: 일요일, 1: 월요일, ...
+  const monday = new Date(baseDate);
+  monday.setDate(baseDate.getDate() - (day === 0 ? 6 : day - 1) + weekOffset * 7);
+
+  const weekDates = [];
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    weekDates.push(d);
+  }
+  return weekDates;
+};
 
 //-----------------------------📌RouteComponent📌-----------------------------
 export default function DesktopDate({date} : Props) {
@@ -209,10 +209,11 @@ function DateSelector({baseDate, weekOffset} : DateSelectorProps){
 //-----------------------------🔥MenuDisplay🔥-----------------------------
 //날짜에 맞게 메뉴(조식, 점심, 석식) 보여주는 Component
 function MenuDisplay({date} : MenuDisplayProps){
-  const [firstMenuData, setFirstMenuData] = useState<MenuData | null>(null);
-  const [secondMenuData, setSecondMenuData] = useState<MenuData | null>(null);
+  const [firstMenuData, setFirstMenuData] = useState<MenuData>();
+  const [secondMenuData, setSecondMenuData] = useState<MenuData>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const fixedBreakfast = ['시리얼*우유','토스트*잼','야채샐러드*D'];
 
   const mondayStr = useMemo(() => {
     const monday = getWeekDates(dayjs(date).toDate())[0];
@@ -225,20 +226,18 @@ function MenuDisplay({date} : MenuDisplayProps){
         setLoading(true);
         setError(null);
         // 제 1학생식당의 주 단위 메뉴 GET
-        const resFirst: MenuApiResponse = await axios.get(`http://grrrr.is-an.ai:9090/api/v1/restaurants/${FIRST_RESTAURANT}`,{
-          params: {
-            date: mondayStr
-          }
-        });
-        setFirstMenuData(resFirst.data);
+        const resFirst = await axios.get(
+          `http://grrrr.is-an.ai:9090/api/v1/restaurants/${FIRST_RESTAURANT}`,
+          { params: { date: mondayStr } }
+        );
+        setFirstMenuData(resFirst.data.data);
 
         //제 2학생식당의 주 단위 메뉴 GET
-        const resSecond: MenuApiResponse = await axios.get(`http://grrrr.is-an.ai:9090/api/v1/restaurants/${SECOND_RESTAURANT}`,{
-          params: {
-            date: mondayStr
-          }
-        });
-        setSecondMenuData(resSecond.data);
+        const resSecond = await axios.get(
+          `http://grrrr.is-an.ai:9090/api/v1/restaurants/${SECOND_RESTAURANT}`,
+          { params: { date: mondayStr } }
+        );
+        setSecondMenuData(resSecond.data.data);
 
       } catch(err){
         if(axios.isAxiosError(err)){
@@ -253,13 +252,213 @@ function MenuDisplay({date} : MenuDisplayProps){
     fetchMenu();
   },[mondayStr])
 
-  // 나중에 dayData = firstMenuData.meals_by_day.find(d=> d.date === date) 사용해서 일자별 필터링
-  // 이후 dayData.meals["breakfast"].menu_items 로 각 메뉴별(객체) 저장 배열 만들어서 보여주면 될 듯
+  // 각 일자별 1학, 2학 전체 식단표 받아오기(조식/중식/석식)
+  const firstDayData = firstMenuData?.meals_by_day.find(d=> d.date === date);
+  const secondDayData = secondMenuData?.meals_by_day.find(d=> d.date === date);
+  // 1학, 2학 별로 조식/중식/석식 저장
+  // 조식
+  const firstBreakfastItems = firstDayData?.meals?.["Breakfast"]?.menu_items.filter((item) => (!fixedBreakfast.includes(item.name)));
+  const secondBreakfastItems = secondDayData?.meals?.["Breakfast"]?.menu_items.filter((item) => (!fixedBreakfast.includes(item.name)));
+  // 중식_1
+  const firstLunchItems_1 = firstDayData?.meals?.["Lunch_1"]?.menu_items;
+  const secondLunchItems_1 = secondDayData?.meals?.["Lunch_1"]?.menu_items;
+  // 중식_2
+  const firstLunchItems_2 = firstDayData?.meals?.["Lunch_2"]?.menu_items;
+  const secondLunchItems_2 = secondDayData?.meals?.["Lunch_2"]?.menu_items;
+  // 석식
+  const firstDinnerItems = firstDayData?.meals?.["Dinner"]?.menu_items;
+  const secondDinnerItems = secondDayData?.meals?.["Dinner"]?.menu_items;
+
   return(
-    <div>
-      <p>
-        
-      </p>
+    <div className="sm:mx-10 md:mx-30 lg:mx-50 xl:mx-70">
+      {/* 조식 div */}
+      <div className="border border-orange-500 rounded-xl my-10">
+        <div className="bg-[#FFB080] rounded-t-xl flex items-center p-4">
+          <img alt="조식" src="/logoBreakfast.svg" />
+          <span className="font-bold px-1">조식</span>
+          <span className="flex-1">(08:00-09:00)</span>
+          <span className="font-semibold">1,000원</span>
+        </div>
+        <div className="flex justify-center items-stretch">
+          <div className="flex-1">
+            <div className="text-center p-3 border-r-1 border-b-1 border-orange-500 font-semibold">
+              제1 학생식당
+            </div>
+             <div className="border-r-1 border-orange-500">
+              {(() => {
+                return firstBreakfastItems && firstBreakfastItems.length > 0 ? (
+                  <ul className="p-4 font-medium">
+                    {firstBreakfastItems.map( (item) => (
+                      <li className={`p-1 ${item.category === "메인메뉴" ? "text-orange-500" : ""}`}>{item.name}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="p-4 text-center text-gray-400">조식 메뉴가 없습니다.</div>
+                );
+              })()}
+            </div>
+          </div>
+          <div className="flex-1">
+            <div className="text-center p-3 border-b-1 border-orange-500 font-semibold">
+              제2 학생식당
+            </div>
+            <div className="">
+              {(() => {
+                return secondBreakfastItems && secondBreakfastItems.length > 0 ? (
+                  <ul className="p-4 font-medium">
+                    {secondBreakfastItems.map( (item) => (
+                      <li className={`p-1 ${item.category === "메인메뉴" ? "text-orange-500" : ""}`}>{item.name}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="p-4 text-center text-gray-400">조식 메뉴가 없습니다.</div>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      {/* 중식 div */}
+      <div className="border border-orange-500 rounded-xl my-10">
+        <div className="bg-[#FFB080] rounded-t-xl flex items-center p-4">
+          <img alt="조식" src="/logoLunch.svg" />
+          <span className="font-bold px-1">중식</span>
+          <span className="flex-1">(11:30-13:30)</span>
+          <span className="font-semibold">5,500원</span>
+        </div>
+
+        <div className="flex justify-center items-stretch">
+          {/* 제1 학생식당 */}
+          <div className="flex-1">
+            <div className="text-center p-3 border-r-1 border-b-1 border-orange-500 font-semibold">
+              제1 학생식당
+            </div>
+            {/* 중식 메뉴 1 */}
+            <div className="bg-[#FFDEC9] border-b-1 border-r-1 border-orange-500 h-[100px] flex items-center">
+              {(() => {
+                return firstLunchItems_1 && firstLunchItems_1.length > 0 ? (
+                  <ul className="p-4 font-medium">
+                    {firstLunchItems_1.map((item) => (
+                      <li>
+                        {item.name.split("\n*").map((line) => (
+                          <div className="p-1">{line}</div>
+                        ))}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="p-4 mx-auto text-gray-400">중식 메뉴가 없습니다.</div>
+                );
+              })()}
+            </div>
+            {/* 중식 메뉴 2 */}
+            <div className="border-r-1 border-orange-500">
+              {(() => {
+                return firstLunchItems_2 && firstLunchItems_2.length > 0 ? (
+                  <ul className="p-4 font-medium">
+                    {firstLunchItems_2.map( (item) => (
+                      <li className={`p-1 ${item.category === "메인메뉴" ? "text-orange-500" : ""}`}>{item.name}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="p-4 text-center text-gray-400">중식 메뉴가 없습니다.</div>
+                );
+              })()}
+            </div>
+          </div>
+    
+          {/* 제2 학생식당 */}
+          <div className="flex-1">
+            <div className="text-center p-3 border-b-1 border-orange-500 font-semibold">
+              제2 학생식당
+            </div>
+            {/* 중식 메뉴 1 */}
+            <div className="bg-[#FFDEC9] border-b-1 border-orange-500 h-[100px] flex items-center">
+              {(() => {
+                return secondLunchItems_1 && secondLunchItems_1.length > 0 ? (
+                  <ul className="p-4 font-medium">
+                    {secondLunchItems_1.map((item) => (
+                      <li>
+                        {item.name.split("\n*").map((line) => (
+                          <div className="p-1">{line}</div>
+                        ))}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="p-4 mx-auto text-gray-400">중식 메뉴가 없습니다.</div>
+                );
+              })()}
+            </div>
+            {/* 중식 메뉴 2 */}
+            <div className="">
+              {(() => {
+                return secondLunchItems_2 && secondLunchItems_2.length > 0 ? (
+                  <ul className="p-4 font-medium">
+                    {secondLunchItems_2.map( (item) => (
+                      <li className={`p-1 ${item.category === "메인메뉴" ? "text-orange-500" : ""}`}>{item.name}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="p-4 text-center text-gray-400">중식 메뉴가 없습니다.</div>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    {/* 석식 div */}
+    <div className="border border-orange-500 rounded-xl my-10">
+      <div className="bg-[#FFB080] rounded-t-xl flex items-center p-4">
+        <img alt="조식" src="/logoDinner.svg" />
+        <span className="font-bold px-1">석식</span>
+        <span className="flex-1">(17:00-18:30)</span>
+        <span className="font-semibold">5,500원</span>
+      </div>
+      <div className="flex justify-center items-stretch">
+        <div className="flex-1">
+          <div className="text-center p-3 border-r-1 border-b-1 border-orange-500 font-semibold">
+            제1 학생식당
+          </div>
+            <div className="border-r-1 border-orange-500">
+            {(() => {
+              return firstDinnerItems && firstDinnerItems.length > 0 ? (
+                <ul className="p-4 font-medium">
+                  {firstDinnerItems.map( (item) => (
+                    <li className={`p-1 ${item.category === "메인메뉴" ? "text-orange-500" : ""}`}>{item.name}</li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="p-4 text-center text-gray-400">석식 메뉴가 없습니다.</div>
+              );
+            })()}
+          </div>
+        </div>
+        <div className="flex-1">
+          <div className="text-center p-3 border-b-1 border-orange-500 font-semibold">
+            제2 학생식당
+          </div>
+            <div className="">
+            {(() => {
+              return secondDinnerItems && secondDinnerItems.length > 0 ? (
+                <ul className="p-4 font-medium">
+                  {secondDinnerItems.map( (item) => (
+                    <li className={`p-1 ${item.category === "메인메뉴" ? "text-orange-500" : ""}`}>{item.name}</li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="p-4 text-center text-gray-400">석식 메뉴가 없습니다.</div>
+              );
+            })()}
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
   )
 }
