@@ -119,12 +119,12 @@ function DateNevigator({baseDate, setBaseDate}: DateNavigatorProps) {
 
   return(
     <div className="flex items-center justify-center gap-4 bg-[#F8F4F1] p-4">
-      <img className="hover:brightness-95 transition" alt="leftArrow" src="../public/leftArrow.svg"
+      <img className="hover:brightness-95 transition" alt="leftArrow" src="../leftArrow.svg"
       onClick={() => handleDayChange(-1)}  />
       <span className="text-2xl font-bold text-center">
         {formatKoreanDate(baseDate)}
       </span>
-      <img className="hover:brightness-95 transition" alt="rightArrow" src="../public/rightArrow.svg"
+      <img className="hover:brightness-95 transition" alt="rightArrow" src="../rightArrow.svg"
       onClick={() => handleDayChange(1)} />
     </div>
   )

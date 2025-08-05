@@ -144,12 +144,12 @@ function DateNevigator({baseDate, weekOffset, setWeekOffset}: DateNavigatorProps
 
   return (
     <div className="flex items-center justify-center gap-4 bg-[#F8F4F1] p-4">
-      <img className="hover:brightness-95 transition" alt="leftArrow" src="../public/leftArrow.svg" 
+      <img className="hover:brightness-95 transition" alt="leftArrow" src="../leftArrow.svg" 
       onClick={() => handleWeekChange(-1)} />
       <span className="text-2xl font-bold min-w-[320px] text-center">
         {formatKoreanDate(monday)} - {`${monday.getMonth() === friday.getMonth() ? '' : `${friday.getMonth() + 1}월 `}${friday.getDate()}일`}
       </span>
-      <img className="hover:brightness-95 transition" alt="rightArrow" src="../public/rightArrow.svg" 
+      <img className="hover:brightness-95 transition" alt="rightArrow" src="../rightArrow.svg" 
       onClick={() => handleWeekChange(1)} />
     </div>
   );
