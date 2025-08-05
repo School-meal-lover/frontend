@@ -284,7 +284,7 @@ function MenuDisplay({date} : MenuDisplayProps){
             <div className="text-center p-3 border-r-1 border-b-1 border-orange-500 font-semibold">
               제1 학생식당
             </div>
-             <div className="border-r-1 border-orange-500">
+             <div className="border-r-1 border-b-1 border-orange-500">
               {(() => {
                 return firstBreakfastItems && firstBreakfastItems.length > 0 ? (
                   <ul className="p-4 font-medium">
@@ -296,6 +296,14 @@ function MenuDisplay({date} : MenuDisplayProps){
                   <div className="p-4 text-center text-gray-400">조식 메뉴가 없습니다.</div>
                 );
               })()}
+            </div>
+            {/* 조식 메뉴 2 */}
+            <div>
+              <ul className="p-4 font-medium border-r-1 border-orange-500">
+                {fixedBreakfast.map( (item) => (
+                  <li className={`p-1 ${item==="야채샐러드*D" ? "text-green-700" : ""}`}>{item}</li>
+                ))}
+              </ul>
             </div>
           </div>
           <div className="flex-1">
