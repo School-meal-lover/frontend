@@ -8,7 +8,7 @@ type BeforeInstallPromptEvent = Event & {
 
 const isStandalone = () => {
   if (window.matchMedia("(display-mode: standalone)").matches) return true;
-  if (window.navigator.standalone) return true;
+  if ((window.navigator as any).standalone) return true;
   return false;
 };
 

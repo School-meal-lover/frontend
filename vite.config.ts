@@ -40,7 +40,7 @@ export default defineConfig({
         navigateFallback: "/index.html",
         runtimeCaching: [
           {
-            urlPattern: ({ request }) => request.destination === "image",
+            urlPattern: ({ request }: { request: Request }) => request.destination === "image",
             handler: "CacheFirst",
             options: {
               cacheName: "images",
@@ -48,7 +48,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: ({ url }) => url.pathname.startsWith("/menu"),
+            urlPattern: ({ url }: { url: URL }) => url.pathname.startsWith("/menu"),
             handler: "StaleWhileRevalidate",
             options: { cacheName: "route-data" },
           },
