@@ -1,4 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// 개별 이미지 스피너 컴포넌트
+const ImageSpinner = () => (
+    <div className="absolute inset-0 flex justify-center items-center bg-gray-100 rounded-xl">
+        <div className="w-10 h-10 border-3 border-gray-300 border-t-[#FF904C] rounded-full animate-spin"></div>
+    </div>
+);
 
 //🎯 interface 선언
 //-----------------------------------
@@ -36,6 +43,8 @@ function Sidebar({selectedCategory, setSelectedCategory}: SidebarProps){
 }
 
 function Category({selectedCategory}:CategoryProps){
+    const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+    
     const allMenuData = [
         {category:"찌개 / 라면", name:"김치찌개", price:"5,000", src:"../lacklack_01.png"},
         {category:"찌개 / 라면", name:"김치찌개+라면사리", price:"5,500", src:"../lacklack_02.png"},
@@ -59,14 +68,26 @@ function Category({selectedCategory}:CategoryProps){
     ]
 
     const menuData = allMenuData.filter(item => item.category === selectedCategory)
+
+    const handleImageLoad = (src: string) => {
+        setLoadedImages(prev => new Set([...prev, src]));
+    };
+
     return(
        <div className="px-15 py-10 flex-1 bg-[#F8F4F1]">
             <h1 className="font-bold text-[25px]">락락 메뉴 &gt; {selectedCategory}</h1>
             <div className="my-[30px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
                 {menuData.map((item, index) => (
                     <div key={index} className="border border-[#B7B7B7] rounded-xl shadow-xl p-4">
-                        <div className="w-full h-60">
-                            <img src={item.src} className={`w-full h-full rounded-xl ${selectedCategory === "음료수" ? "object-contain" : "object-cover"}`}/>
+                        <div className="w-full h-60 relative">
+                            {!loadedImages.has(item.src) && <ImageSpinner />}
+                            <img 
+                                src={item.src} 
+                                loading="lazy"
+                                alt={item.name}
+                                onLoad={() => handleImageLoad(item.src)}
+                                className={`w-full h-full rounded-xl ${selectedCategory === "음료수" ? "object-contain" : "object-cover"} ${!loadedImages.has(item.src) ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
+                            />
                         </div>
                         <div className="mt-2 font-bold">{item.name}</div>
                         <div className="text-sm text-gray-500">{item.price}원</div>
@@ -79,6 +100,23 @@ function Category({selectedCategory}:CategoryProps){
 
 export default function DesktopLacklack() {
     const [selectedCategory, setSelectedCategory] = useState("찌개 / 라면")
+    
+    // 첫 번째 카테고리 이미지 프리로딩
+    useEffect(() => {
+        const preloadImages = [
+            "../lacklack_01.png",
+            "../lacklack_02.png", 
+            "../lacklack_03.png",
+            "../lacklack_04.png",
+            "../lacklack_05.png",
+            "../lacklack_06.png"
+        ];
+        
+        preloadImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+    }, []);
     
     return(
         <div className="flex min-h-screen">

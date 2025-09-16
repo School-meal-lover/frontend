@@ -1,7 +1,8 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
-import { useIsMobile, MobileProvider } from '../contexts/MobileContext';
-import MobileLayout from '../layouts/MobileLayout';
-import DesktopLayout from '../layouts/DesktopLayout';
+import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { useIsMobile, MobileProvider } from "../contexts/MobileContext";
+import MobileLayout from "../layouts/MobileLayout";
+import DesktopLayout from "../layouts/DesktopLayout";
+import PwaInstallPrompt from "../components/Mobile/PwaInstallPrompt";
 
 const RootLayout = () => {
   const { isMobile } = useIsMobile();
@@ -9,6 +10,7 @@ const RootLayout = () => {
   return isMobile ? (
     <MobileLayout>
       <Outlet />
+      <PwaInstallPrompt />
     </MobileLayout>
   ) : (
     <DesktopLayout>
