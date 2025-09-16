@@ -1,5 +1,15 @@
 /// <reference types="vite/client" />
 
+interface ImportMetaEnv {
+  readonly VITE_API_BASE_URL: string
+  readonly VITE_FIRST_RESTAURANT_ID: string
+  readonly VITE_SECOND_RESTAURANT_ID: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
+
 declare module "vite-plugin-pwa" {
   export interface VitePWAOptions {
     registerType?: "autoUpdate" | "prompt";
