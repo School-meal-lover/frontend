@@ -48,7 +48,7 @@ export default function MobileLacklack() {
     }, []);
 
     return(
-        <div className="bg-[#F8F4F1] p-7">
+        <div className="bg-[#F8F4F1] p-5 min-w-72 min-h-screen">
             <DateNevigator baseDate={baseDate} setBaseDate={setBaseDate} />
             <CategoryDisplay selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}/>
             <MenuDisplay selectedCategory={selectedCategory} />
@@ -72,13 +72,13 @@ function DateNevigator({baseDate, setBaseDate}: DateNavigatorProps) {
   };
 
   return(
-    <div className="flex items-center justify-center gap-4 bg-[#F8F4F1] p-4">
-      <img className="hover:brightness-95 transition" alt="leftArrow" src="../leftArrow.svg"
+    <div className="flex items-center justify-center gap-4 bg-[#F8F4F1] p-4 mx-5">
+      <img className="w-10 h-10 hover:brightness-95 transition" alt="leftArrow" src="../leftArrow.svg"
       onClick={() => handleDayChange(-1)}  />
-      <span className="text-2xl font-bold text-center">
+      <span className="text-lg font-bold text-center whitespace-nowrap">
         {formatKoreanDate(baseDate)}
       </span>
-      <img className="hover:brightness-95 transition" alt="rightArrow" src="../rightArrow.svg"
+      <img className="w-10 h-10 hover:brightness-95 transition" alt="rightArrow" src="../rightArrow.svg"
       onClick={() => handleDayChange(1)} />
     </div>
   )

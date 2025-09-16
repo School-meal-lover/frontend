@@ -92,7 +92,7 @@ export default function MobileDate({date} : Props) {
   }, [date])
 
   return(
-    <div className="bg-[#F8F4F1] p-7">
+    <div className="bg-[#F8F4F1] p-5 min-w-[300px] min-h-screen">
       <DateNevigator baseDate={baseDate} setBaseDate={setBaseDate} />
       <MenuDisplay date={date} />
     </div>
@@ -118,7 +118,7 @@ function DateNevigator({baseDate, setBaseDate}: DateNavigatorProps) {
   };
 
   return(
-    <div className="flex items-center justify-center gap-4 bg-[#F8F4F1] p-4">
+    <div className="flex items-center justify-center gap-4 bg-[#F8F4F1] p-4 mx-5">
       <img className="w-10 h-10 hover:brightness-95 transition" alt="leftArrow" src="../leftArrow.svg"
       onClick={() => handleDayChange(-1)}  />
       <span className="text-lg font-bold text-center whitespace-nowrap">
@@ -184,7 +184,7 @@ function MenuDisplay({ date }: MenuDisplayProps) {
   const dinnerItems = dayData?.meals?.["Dinner"]?.menu_items;
 
   return(
-    <div className="p-5">
+    <div className="">
       {/* 식당 선택 div */}
       <div className="flex justify-center items-center mb-10">
         {restaurants.map((restaurant) => (
@@ -198,7 +198,6 @@ function MenuDisplay({ date }: MenuDisplayProps) {
           </div>
         ))}
       </div>
-
       {/* 조식 div */}
       <div className="border border-orange-500 rounded-xl mb-10">
         <div className="bg-[#FFB080] rounded-t-xl flex items-center p-4">
