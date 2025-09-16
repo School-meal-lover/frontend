@@ -135,9 +135,9 @@ function MenuDisplay({selectedCategory}: MenuDisplayProps){
     return(
         <div className="border-t-1 border-[#B7B7B7]">
             <h1 className="font-medium text-xl my-4">락락 메뉴 &gt; {selectedCategory}</h1>
-            <div className="grid grid-cols-1 [@media(min-width:397px)]:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 [@media(min-width:380px)]:grid-cols-2 gap-4">
                 {menuData.map((item) => (
-                    <div key={item.name} className="border border-[#B7B7B7] rounded-[10px] shadow-xl p-4">
+                    <div key={item.name} className="border border-[#B7B7B7] rounded-[10px] shadow-xl p-3">
                         <div className="w-full h-35 relative">
                             {!loadedImages.has(item.src) && <ImageSpinner />}
                             <img 
