@@ -3,8 +3,9 @@ import dayjs from "dayjs";
 import axios from "axios";
 import React, {useState, useEffect, useMemo} from 'react';
 
-const FIRST_RESTAURANT = "6dd9a55b-1202-4073-a875-0bb79f57a3b0";
-const SECOND_RESTAURANT = "860be56e-fbf2-4a8e-b5e3-8c8f151d8b21";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const FIRST_RESTAURANT = import.meta.env.VITE_FIRST_RESTAURANT_ID;
+const SECOND_RESTAURANT = import.meta.env.VITE_SECOND_RESTAURANT_ID;
 // const LACK_LACK = "e4f67cd4-eebd-467e-a0e9-e718d3b056ed"; 
 
 
@@ -227,14 +228,14 @@ function MenuDisplay({date} : MenuDisplayProps){
         setError(null);
         // 제 1학생식당의 주 단위 메뉴 GET
         const resFirst = await axios.get(
-          `http://grrrr.is-an.ai:9090/api/v1/restaurants/${FIRST_RESTAURANT}`,
+          `${API_BASE_URL}/restaurants/${FIRST_RESTAURANT}`,
           { params: { date: mondayStr } }
         );
         setFirstMenuData(resFirst.data.data);
 
         //제 2학생식당의 주 단위 메뉴 GET
         const resSecond = await axios.get(
-          `http://grrrr.is-an.ai:9090/api/v1/restaurants/${SECOND_RESTAURANT}`,
+          `${API_BASE_URL}/restaurants/${SECOND_RESTAURANT}`,
           { params: { date: mondayStr } }
         );
         setSecondMenuData(resSecond.data.data);
