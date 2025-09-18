@@ -46,25 +46,25 @@ function Category({selectedCategory}:CategoryProps){
     const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
     
     const allMenuData = [
-        {category:"찌개 / 라면", name:"김치찌개", price:"5,000", src:"../lacklack_01.png"},
-        {category:"찌개 / 라면", name:"김치찌개+라면사리", price:"5,500", src:"../lacklack_02.png"},
-        {category:"찌개 / 라면", name:"애호박찌개", price:"5,000", src:"../lacklack_03.png"},
-        {category:"찌개 / 라면", name:"애호박찌개+라면사리", price:"5,500", src:"../lacklack_04.png"},
-        {category:"찌개 / 라면", name:"버섯불고기", price:"6,500", src:"../lacklack_05.png"},
-        {category:"찌개 / 라면", name:"라면", price:"3,000", src:"../lacklack_06.png"},
-        {category:"찌개 / 라면", name:"계란라면", price:"3,500", src:"../lacklack_07.png"},
-        {category:"찌개 / 라면", name:"치즈라면", price:"3,500", src:"../lacklack_08.png"},
-        {category:"돈가스 / 밥", name:"치즈돈가스", price:"6,500", src:"../lacklack_09.png"},
-        {category:"돈가스 / 밥", name:"치킨가스", price:"5,500", src:"../lacklack_10.png"},
-        {category:"돈가스 / 밥", name:"웰빙비빔밥", price:"5,000", src:"../lacklack_11.png"},
-        {category:"돈가스 / 밥", name:"제육덮밥", price:"6,000", src:"../lacklack_12.png"},
-        {category:"돈가스 / 밥", name:"김치볶음밥", price:"5,000", src:"../lacklack_13.png"},
-        {category:"돈가스 / 밥", name:"야채볶음밥", price:"5,000", src:"../lacklack_14.png"},
-        {category:"돈가스 / 밥", name:"오므라이스", price:"5,000", src:"../lacklack_15.png"},
-        {category:"돈가스 / 밥", name:"참치컵밥", price:"5,000", src:"../lacklack_16.png"},
-        {category:"음료수", name:"콜라", price:"1,200", src:"../lacklack_17.png"},
-        {category:"음료수", name:"스프라이트", price:"1,200", src:"../lacklack_18.png"},
-        {category:"음료수", name:"환타", price:"1,500", src:"../lacklack_19.png"},
+        {category:"찌개 / 라면", name:"김치찌개", price:"5,000", src:"../lacklack_01.webp"},
+        {category:"찌개 / 라면", name:"김치찌개+라면사리", price:"5,500", src:"../lacklack_02.webp"},
+        {category:"찌개 / 라면", name:"애호박찌개", price:"5,000", src:"../lacklack_03.webp"},
+        {category:"찌개 / 라면", name:"애호박찌개+라면사리", price:"5,500", src:"../lacklack_04.webp"},
+        {category:"찌개 / 라면", name:"버섯불고기", price:"6,500", src:"../lacklack_05.webp"},
+        {category:"찌개 / 라면", name:"라면", price:"3,000", src:"../lacklack_06.webp"},
+        {category:"찌개 / 라면", name:"계란라면", price:"3,500", src:"../lacklack_07.webp"},
+        {category:"찌개 / 라면", name:"치즈라면", price:"3,500", src:"../lacklack_08.webp"},
+        {category:"돈가스 / 밥", name:"치즈돈가스", price:"6,500", src:"../lacklack_09.webp"},
+        {category:"돈가스 / 밥", name:"치킨가스", price:"5,500", src:"../lacklack_10.webp"},
+        {category:"돈가스 / 밥", name:"웰빙비빔밥", price:"5,000", src:"../lacklack_11.webp"},
+        {category:"돈가스 / 밥", name:"제육덮밥", price:"6,000", src:"../lacklack_12.webp"},
+        {category:"돈가스 / 밥", name:"김치볶음밥", price:"5,000", src:"../lacklack_13.webp"},
+        {category:"돈가스 / 밥", name:"야채볶음밥", price:"5,000", src:"../lacklack_14.webp"},
+        {category:"돈가스 / 밥", name:"오므라이스", price:"5,000", src:"../lacklack_15.webp"},
+        {category:"돈가스 / 밥", name:"참치컵밥", price:"5,000", src:"../lacklack_16.webp"},
+        {category:"음료수", name:"콜라", price:"1,200", src:"../lacklack_17.webp"},
+        {category:"음료수", name:"스프라이트", price:"1,200", src:"../lacklack_18.webp"},
+        {category:"음료수", name:"환타", price:"1,500", src:"../lacklack_19.webp"},
     ]
 
     const menuData = allMenuData.filter(item => item.category === selectedCategory)
@@ -104,12 +104,12 @@ export default function DesktopLacklack() {
     // 첫 번째 카테고리 이미지 프리로딩
     useEffect(() => {
         const preloadImages = [
-            "../lacklack_01.png",
-            "../lacklack_02.png", 
-            "../lacklack_03.png",
-            "../lacklack_04.png",
-            "../lacklack_05.png",
-            "../lacklack_06.png"
+            "../lacklack_01.webp",
+            "../lacklack_02.webp", 
+            "../lacklack_03.webp",
+            "../lacklack_04.webp",
+            "../lacklack_05.webp",
+            "../lacklack_06.webp"
         ];
         
         preloadImages.forEach(src => {

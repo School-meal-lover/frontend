@@ -7,8 +7,6 @@ import React, {useState, useEffect} from 'react';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const FIRST_RESTAURANT = import.meta.env.VITE_FIRST_RESTAURANT_ID;
 const SECOND_RESTAURANT = import.meta.env.VITE_SECOND_RESTAURANT_ID;
-// const LACK_LACK = "e4f67cd4-eebd-467e-a0e9-e718d3b056ed"; 
-
 
 //🎯 interface 선언
 //-----------------------------------
