@@ -33,7 +33,10 @@ export default defineConfig({
         background_color: "#ffffff",
         theme_color: "#ffffff",
         icons: [
-          { src: "/GRRRR.svg", sizes: "any", type: "image/svg+xml", purpose: "any maskable" },
+          { src: "/icon-144.png", sizes: "144x144", type: "image/png", purpose: "any" },
+          { src: "/icon-180.png", sizes: "180x180", type: "image/png", purpose: "any" },
+          { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+          { src: "/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
         ],
       },
       workbox: {
