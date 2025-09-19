@@ -55,7 +55,7 @@ export default function PwaInstallPrompt() {
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40">
       <div className="w-full sm:max-w-sm sm:rounded-2xl bg-white text-gray-900 p-4 sm:p-6">
         <div className="flex items-center gap-3 mb-3">
-          <img src="/GRRRR.svg" alt="app icon" className="w-8 h-8" />
+          <img src="/icon-192.png" alt="app icon" className="w-8 h-8" />
           <div className="font-semibold">꼬르륵(Grrr) 앱 설치</div>
         </div>
         {isIosMobile ? (
