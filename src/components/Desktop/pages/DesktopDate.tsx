@@ -4,10 +4,6 @@ import axios from "axios";
 import React, {useState, useEffect, useMemo} from 'react';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const FIRST_RESTAURANT = import.meta.env.VITE_FIRST_RESTAURANT_ID;
-const SECOND_RESTAURANT = import.meta.env.VITE_SECOND_RESTAURANT_ID;
-
-
 
 //🎯 interface 선언
 //-----------------------------------
@@ -228,14 +224,14 @@ function MenuDisplay({date} : MenuDisplayProps){
         setError(null);
         // 제 1학생식당의 주 단위 메뉴 GET
         const resFirst = await axios.get(
-          `${API_BASE_URL}/restaurants/${FIRST_RESTAURANT}`,
+          `${API_BASE_URL}/restaurants/restaurant_1`,
           { params: { date: mondayStr } }
         );
         setFirstMenuData(resFirst.data.data);
 
         //제 2학생식당의 주 단위 메뉴 GET
         const resSecond = await axios.get(
-          `${API_BASE_URL}/restaurants/${SECOND_RESTAURANT}`,
+          `${API_BASE_URL}/restaurants/restaurant_2`,
           { params: { date: mondayStr } }
         );
         setSecondMenuData(resSecond.data.data);
