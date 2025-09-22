@@ -25,8 +25,8 @@ export default defineConfig({
         "GRRRR.svg",
       ],
       manifest: {
-        name: "꼬르륵(Grrr)",
-        short_name: "Grrr",
+        name: "꼬르륵(Grrrr)",
+        short_name: "꼬르륵",
         start_url: "/",
         scope: "/",
         display: "standalone",
