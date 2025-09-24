@@ -127,8 +127,7 @@ export default function MobileIntroduce() {
                             </div>
                         </div>
                     </div>
-                </div>
-                
+                </div>       
             </div>
         </div>  
     );
