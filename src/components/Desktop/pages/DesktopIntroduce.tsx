@@ -1,12 +1,12 @@
 export default function DesktopIntroduce() {
     // 팀원 데이터 (예시)
     const teamMembers = [
-        { id: 1, name: "최홍제", role: "Product Manager", description: "프로젝트 기획과 요구사항 분석, 팀 커뮤니케이션을 담당합니다.", src: "../introduce_01.png"},
-        { id: 2, name: "박시원", role: "Backend Developer", description: "데이터 처리 로직과 API 최적화, 보안 구현을 담당합니다.", src: "../introduce_02.png" },
-        { id: 3, name: "한세민", role: "Backend Developer", description: "API 설계와 데이터베이스 관리, 서버 인프라 구축을 담당합니다.", src: "../introduce_03.png" },
-        { id: 4, name: "박미솔", role: "Frontend Developer", description: "PWA 구현과 반응형 웹 디자인, 성능 최적화를 담당합니다.", src: "../introduce_04.png" },
-        { id: 5, name: "이준성", role: "Frontend Developer", description: "React와 TypeScript를 활용한 사용자 인터페이스 개발을 담당합니다.", src: "../introduce_05.png" },
-        { id: 6, name: "홍수아", role: "UX/UI Designer", description: "사용자 경험을 고려한 직관적인 디자인과 프로토타이핑을 담당합니다.", src: "../introduce_06.png" }
+        { id: 1, name: "최홍제", role: "Product Manager", description: "프로젝트 기획과 요구사항 분석, 팀 커뮤니케이션을 담당합니다.", src: "../introduce_01.webp"},
+        { id: 2, name: "박시원", role: "Backend Developer", description: "데이터 처리 로직과 API 최적화, 보안 구현을 담당합니다.", src: "../introduce_02.webp" },
+        { id: 3, name: "한세민", role: "Backend Developer", description: "API 설계와 데이터베이스 관리, 서버 인프라 구축을 담당합니다.", src: "../introduce_03.webp" },
+        { id: 4, name: "박미솔", role: "Frontend Developer", description: "PWA 구현과 반응형 웹 디자인, 성능 최적화를 담당합니다.", src: "../introduce_04.webp" },
+        { id: 5, name: "이준성", role: "Frontend Developer", description: "React와 TypeScript를 활용한 사용자 인터페이스 개발을 담당합니다.", src: "../introduce_05.webp" },
+        { id: 6, name: "홍수아", role: "UX/UI Designer", description: "사용자 경험을 고려한 직관적인 디자인과 프로토타이핑을 담당합니다.", src: "../introduce_06.webp" }
     ];
 
     return (
