@@ -119,7 +119,7 @@ export default function DesktopIntroduce() {
                                         <h3 className="text-xl font-bold text-gray-800 mr-4">취향 기반 식단 추천</h3>
                                         <span className="text-sm text-gray-600">2025.12.15 예정</span>
                                     </div>
-                                    <p className="text-gray-600">개인의 식성과 선호도를 기반으로 맞춤 식단을 추천해드립니다.</p>
+                                    <p className="text-gray-600">개인 취향에 맞는 맞춤 식단을 추천해드립니다.</p>
                                 </div>
                             </div>
                         </div>
