@@ -61,7 +61,72 @@ export default function DesktopIntroduce() {
                         </div>
                     ))}
                 </div>
+                <div className="border border-gray-300 mt-20"></div>
+                {/* 개발 예정 기능 섹션 */}
+                <div className="mt-20">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-bold text-gray-800 mb-4">앞으로 추가될 기능들</h2>
+                    </div>
+                    
+                    {/* 타임라인 */}
+                    <div className="relative max-w-4xl mx-auto">
+                        {/* 세로 바 */}
+                        <div className="absolute left-2.5 top-2 bottom-10 w-1 bg-orange-300"></div>
+                        
+                        {/* 기능들 */}
+                        <div className="space-y-20">
+                            {/* 기능 1 */}
+                            <div className="relative flex items-start mt-10">
+                                <div className="relative z-10 w-6 h-6 bg-orange-400 rounded-full"></div>
+                                <div className="ml-8 flex-1">
+                                    <div className="flex items-center mb-2">
+                                        <h3 className="text-xl font-bold text-gray-800 mr-4">혼잡도 페이지</h3>
+                                        <span className="text-sm text-gray-600">2025.11.01 예정</span>
+                                    </div>
+                                    <p className="text-gray-600">실시간 식당 혼잡도 정보를 제공할 예정입니다.</p>
+                                </div>
+                            </div>
+                            
+                            {/* 기능 2 */}
+                            <div className="relative flex items-start">
+                                <div className="relative z-10 w-6 h-6 bg-orange-400 rounded-full"></div>
+                                <div className="ml-8 flex-1">
+                                    <div className="flex items-center mb-2">
+                                        <h3 className="text-xl font-bold text-gray-800 mr-4">번역 기능</h3>
+                                        <span className="text-sm text-gray-600">2025.11.15 예정</span>
+                                    </div>
+                                    <p className="text-gray-600">다양한 언어로 메뉴명을 번역하여 제공합니다.</p>
+                                </div>
+                            </div>
+                            
+                            {/* 기능 3 */}
+                            <div className="relative flex items-start">
+                                <div className="relative z-10 w-6 h-6 bg-orange-400 rounded-full"></div>
+                                <div className="ml-8 flex-1">
+                                    <div className="flex items-center mb-2">
+                                        <h3 className="text-xl font-bold text-gray-800 mr-4">개인별 영양소 분석</h3>
+                                        <span className="text-sm text-gray-600">2025.12.01 예정</span>
+                                    </div>
+                                    <p className="text-gray-600">선택한 메뉴의 칼로리와 영양소를 분석해드립니다.</p>
+                                </div>
+                            </div>
+                            
+                            {/* 기능 4 */}
+                            <div className="relative flex items-start">
+                                <div className="relative z-10 w-6 h-6 bg-orange-400 rounded-full"></div>
+                                <div className="ml-8 flex-1">
+                                    <div className="flex items-center mb-2">
+                                        <h3 className="text-xl font-bold text-gray-800 mr-4">취향 기반 식단 추천</h3>
+                                        <span className="text-sm text-gray-600">2025.12.15 예정</span>
+                                    </div>
+                                    <p className="text-gray-600">개인의 식성과 선호도를 기반으로 맞춤 식단을 추천해드립니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
-        </div>
+        </div>  
     );
 }
