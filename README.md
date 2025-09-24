@@ -61,6 +61,12 @@ src/
 
 ## 🚀 시작하기
 
+### Environment
+이 어플리케이션을 작동시키기 위해서 필수적으로 필요한 환경변수는 다음과 같습니다.
+```bash
+VITE_API_BASE_URL = API.example.com
+```
+
 ### 필수 요구사항
 - Node.js 18+ 
 - npm 또는 yarn
