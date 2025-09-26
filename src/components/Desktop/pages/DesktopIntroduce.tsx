@@ -69,7 +69,7 @@ export default function DesktopIntroduce() {
                     </div>
                     
                     {/* 타임라인 */}
-                    <div className="relative max-w-4xl mx-auto">
+                    <div className="relative max-w-4xl mx-auto mb-20">
                         {/* 세로 바 */}
                         <div className="absolute left-2.5 top-2 bottom-10 w-1 bg-orange-300"></div>
                         
