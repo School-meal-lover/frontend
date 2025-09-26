@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as UploadImport } from './routes/upload'
 import { Route as IndexImport } from './routes/index'
 import { Route as MenuLacklackImport } from './routes/menu/lacklack'
 import { Route as MenuIntroduceImport } from './routes/menu/introduce'
@@ -18,6 +19,12 @@ import { Route as MenuCongestionImport } from './routes/menu/congestion'
 import { Route as MenuDateImport } from './routes/menu/$date'
 
 // Create/Update Routes
+
+const UploadRoute = UploadImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -60,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/upload': {
+      id: '/upload'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof UploadImport
+      parentRoute: typeof rootRoute
+    }
     '/menu/$date': {
       id: '/menu/$date'
       path: '/menu/$date'
@@ -95,6 +109,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/upload': typeof UploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
   '/menu/introduce': typeof MenuIntroduceRoute
@@ -103,6 +118,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/upload': typeof UploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
   '/menu/introduce': typeof MenuIntroduceRoute
@@ -112,6 +128,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/upload': typeof UploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
   '/menu/introduce': typeof MenuIntroduceRoute
@@ -122,6 +139,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/upload'
     | '/menu/$date'
     | '/menu/congestion'
     | '/menu/introduce'
@@ -129,6 +147,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/upload'
     | '/menu/$date'
     | '/menu/congestion'
     | '/menu/introduce'
@@ -136,6 +155,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/upload'
     | '/menu/$date'
     | '/menu/congestion'
     | '/menu/introduce'
@@ -145,6 +165,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  UploadRoute: typeof UploadRoute
   MenuDateRoute: typeof MenuDateRoute
   MenuCongestionRoute: typeof MenuCongestionRoute
   MenuIntroduceRoute: typeof MenuIntroduceRoute
@@ -153,6 +174,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  UploadRoute: UploadRoute,
   MenuDateRoute: MenuDateRoute,
   MenuCongestionRoute: MenuCongestionRoute,
   MenuIntroduceRoute: MenuIntroduceRoute,
@@ -170,6 +192,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/upload",
         "/menu/$date",
         "/menu/congestion",
         "/menu/introduce",
@@ -178,6 +201,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/upload": {
+      "filePath": "upload.tsx"
     },
     "/menu/$date": {
       "filePath": "menu/$date.tsx"

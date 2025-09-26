@@ -1,0 +1,262 @@
+import React, { useState, useRef } from 'react';
+import DesktopFooter from '../Desktop/DesktopFooter';
+import Modal from './Modal';
+
+interface UploadedFile {
+  id: string;
+  file: File;
+  name: string;
+  size: number;
+  uploadTime: Date;
+}
+
+const UploadPage = () => {
+  const [firstRestaurantFiles, setFirstRestaurantFiles] = useState<UploadedFile[]>([]);
+  const [secondRestaurantFiles, setSecondRestaurantFiles] = useState<UploadedFile[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalType, setModalType] = useState<'success' | 'error'>('success');
+  
+  const firstFileInputRef = useRef<HTMLInputElement>(null);
+  const secondFileInputRef = useRef<HTMLInputElement>(null);
+
+  // 파일 유효성 검사
+  const validateFile = (file: File): boolean => {
+    const allowedTypes = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+      'application/vnd.ms-excel' // .xls
+    ];
+    return allowedTypes.includes(file.type);
+  };
+
+  // 파일 업로드 처리
+  const handleFileUpload = (files: FileList, restaurant: 'first' | 'second') => {
+    const newFiles: UploadedFile[] = [];
+    
+    Array.from(files).forEach(file => {
+      if (!validateFile(file)) {
+        setModalMessage('엑셀 파일(.xlsx, .xls)만 업로드 가능합니다.');
+        setModalType('error');
+        setShowModal(true);
+        return;
+      }
+      
+      const uploadedFile: UploadedFile = {
+        id: Math.random().toString(36).substr(2, 9),
+        file,
+        name: file.name,
+        size: file.size,
+        uploadTime: new Date()
+      };
+      newFiles.push(uploadedFile);
+    });
+
+    if (newFiles.length > 0) {
+      if (restaurant === 'first') {
+        setFirstRestaurantFiles(prev => [...prev, ...newFiles]);
+      } else {
+        setSecondRestaurantFiles(prev => [...prev, ...newFiles]);
+      }
+    }
+  };
+
+  // 드래그 앤 드롭 처리
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent, restaurant: 'first' | 'second') => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    handleFileUpload(files, restaurant);
+  };
+
+  // 파일 삭제
+  const removeFile = (id: string, restaurant: 'first' | 'second') => {
+    if (restaurant === 'first') {
+      setFirstRestaurantFiles(prev => prev.filter(file => file.id !== id));
+    } else {
+      setSecondRestaurantFiles(prev => prev.filter(file => file.id !== id));
+    }
+  };
+
+  // 파일 크기 포맷팅
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  // 저장 버튼 클릭
+  const handleSave = async () => {
+    if (firstRestaurantFiles.length === 0 && secondRestaurantFiles.length === 0) {
+      setModalMessage('최소 하나의 파일을 업로드해주세요.');
+      setModalType('error');
+      setShowModal(true);
+      return;
+    }
+
+    setIsUploading(true);
+    
+    try {
+      // TODO: 실제 API 호출로 변경
+      console.log('First Restaurant Files:', firstRestaurantFiles);
+      console.log('Second Restaurant Files:', secondRestaurantFiles);
+      
+      // 임시 지연 (실제 API 호출 시뮬레이션)
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setModalMessage('파일이 성공적으로 업로드되었습니다.');
+      setModalType('success');
+      setShowModal(true);
+      
+      // 성공 후 파일 목록 초기화
+      setFirstRestaurantFiles([]);
+      setSecondRestaurantFiles([]);
+      
+    } catch (error) {
+      setModalMessage('파일 업로드 중 오류가 발생했습니다.');
+      setModalType('error');
+      setShowModal(true);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // 업로드 영역 컴포넌트
+  const UploadArea = ({ 
+    restaurant, 
+    files, 
+    fileInputRef 
+  }: { 
+    restaurant: 'first' | 'second';
+    files: UploadedFile[];
+    fileInputRef: React.RefObject<HTMLInputElement | null>;
+  }) => {
+    const restaurantName = restaurant === 'first' ? '제1 학생식당' : '제2 학생식당';
+    
+    return (
+      <div className="w-full max-w-2xl mx-auto">
+        <h3 className="text-xl font-bold text-gray-800 mb-4">{restaurantName}</h3>
+        
+        {/* 드래그 앤 드롭 영역 */}
+        <div
+          className="border-2 border-dashed border-orange-300 rounded-lg p-8 text-center hover:border-orange-400 transition-colors cursor-pointer"
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, restaurant)}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <div className="text-gray-600">
+            <svg className="mx-auto h-12 w-12 text-orange-400 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <p className="text-lg font-medium">파일을 드래그하거나 클릭하여 업로드</p>
+            <p className="text-sm text-gray-500 mt-2">엑셀 파일(.xlsx, .xls)만 지원</p>
+          </div>
+        </div>
+
+        {/* 파일 입력 */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept=".xlsx,.xls"
+          onChange={(e) => e.target.files && handleFileUpload(e.target.files, restaurant)}
+          className="hidden"
+        />
+
+        {/* 업로드된 파일 목록 */}
+        {files.length > 0 && (
+          <div className="mt-4 space-y-2">
+            <h4 className="font-medium text-gray-700">업로드된 파일:</h4>
+            {files.map((file) => (
+              <div key={file.id} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                <div className="flex-1">
+                  <p className="font-medium text-gray-800">{file.name}</p>
+                  <p className="text-sm text-gray-500">
+                    {formatFileSize(file.size)} • {file.uploadTime.toLocaleString()}
+                  </p>
+                </div>
+                <button
+                  onClick={() => removeFile(file.id, restaurant)}
+                  className="text-red-500 hover:text-red-700 p-1"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900">GIST 학식 메뉴 등록</h1>
+            <p className="mt-2 text-lg text-gray-600">
+              월간 식단표 엑셀 파일을 업로드해주세요 :)
+            </p>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="space-y-12">
+          {/* 제1 학생식당 */}
+          <UploadArea
+            restaurant="first"
+            files={firstRestaurantFiles}
+            fileInputRef={firstFileInputRef}
+          />
+
+          {/* 제2 학생식당 */}
+          <UploadArea
+            restaurant="second"
+            files={secondRestaurantFiles}
+            fileInputRef={secondFileInputRef}
+          />
+
+          {/* 저장 버튼 */}
+          <div className="flex justify-center pt-8 mb-12">
+            <button
+              onClick={handleSave}
+              disabled={isUploading || (firstRestaurantFiles.length === 0 && secondRestaurantFiles.length === 0)}
+              className="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 flex items-center space-x-2"
+            >
+              {isUploading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <span>업로드 중...</span>
+                </>
+              ) : (
+                <span>저장</span>
+              )}
+            </button>
+          </div>
+        </div>
+      </main>
+
+      {/* Modal */}
+      {showModal && (
+        <Modal
+          message={modalMessage}
+          type={modalType}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+export default UploadPage;
