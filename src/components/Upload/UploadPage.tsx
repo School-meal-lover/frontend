@@ -4,6 +4,8 @@ import { useMediaQuery } from 'react-responsive';
 import MobileFooter from '../Mobile/MobileFooter';
 import DesktopFooter from '../Desktop/DesktopFooter';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 interface UploadedFile {
   id: string;
   file: File;
