@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
-import DesktopFooter from '../Desktop/DesktopFooter';
 import Modal from './Modal';
+import { useMediaQuery } from 'react-responsive';
+import MobileFooter from '../Mobile/MobileFooter';
+import DesktopFooter from '../Desktop/DesktopFooter';
 
 interface UploadedFile {
   id: string;
@@ -20,6 +22,9 @@ const UploadPage = () => {
   
   const firstFileInputRef = useRef<HTMLInputElement>(null);
   const secondFileInputRef = useRef<HTMLInputElement>(null);
+
+  // 모바일 여부 확인(footer 추가 위함)
+  const isMobile = useMediaQuery({ maxWidth: 639 });
 
   // 파일 유효성 검사
   const validateFile = (file: File): boolean => {
@@ -43,7 +48,7 @@ const UploadPage = () => {
       }
       
       const uploadedFile: UploadedFile = {
-        id: Math.random().toString(36).substr(2, 9),
+        id: Math.random().toString(36).substring(2, 9),
         file,
         name: file.name,
         size: file.size,
@@ -199,13 +204,42 @@ const UploadPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <header className="relative bg-gradient-to-br from-[#F3E2D4] via-[#E6D1C2] to-[#D9C0B0] shadow-xl overflow-hidden">
+        {/* 배경 장식 요소 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-transparent to-black/5"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/8 rounded-full -translate-y-32 translate-x-32 blur-2xl"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#F3E2D4]/10 rounded-full translate-y-24 -translate-x-24 blur-xl"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900">GIST 학식 메뉴 등록</h1>
-            <p className="mt-2 text-lg text-gray-600">
+            {/* 로고와 제목 */}
+            <div className="flex items-center justify-center mb-6">
+              <div className="relative group">
+                <div className="absolute -inset-2 bg-white/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300"></div>
+                <img 
+                  src="/GRRRR.svg" 
+                  alt="GRRRR Logo" 
+                  className="relative h-14 w-14 mr-6 drop-shadow-lg"
+                />
+              </div>
+              <div className="relative">
+                <h1 className="text-4xl font-bold text-white tracking-tight drop-shadow-lg">
+                  GIST 학식 메뉴 등록 사이트
+                </h1>
+              </div>
+            </div>
+            
+            {/* 서브 제목 */}
+            <p className="text-xl text-[#8B4513] font-light tracking-wide mb-6">
               월간 식단표 엑셀 파일을 업로드해주세요 :)
             </p>
+            
+            {/* 구분선 */}
+            <div className="flex items-center justify-center space-x-4">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-white/50"></div>
+              <div className="w-2 h-2 bg-white/70 rounded-full"></div>
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-white/50"></div>
+            </div>
           </div>
         </div>
       </header>
@@ -246,6 +280,8 @@ const UploadPage = () => {
           </div>
         </div>
       </main>
+      {isMobile && <MobileFooter />}
+      {!isMobile && <DesktopFooter />}
 
       {/* Modal */}
       {showModal && (
