@@ -4,6 +4,8 @@ import { useMediaQuery } from 'react-responsive';
 import MobileFooter from '../Mobile/MobileFooter';
 import DesktopFooter from '../Desktop/DesktopFooter';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 interface UploadedFile {
   id: string;
   file: File;
@@ -13,15 +15,19 @@ interface UploadedFile {
 }
 
 const UploadPage = () => {
-  const [firstRestaurantFiles, setFirstRestaurantFiles] = useState<UploadedFile[]>([]);
-  const [secondRestaurantFiles, setSecondRestaurantFiles] = useState<UploadedFile[]>([]);
+  // 제1 학생식당 파일들
+  const [firstRestaurantKoFile, setFirstRestaurantKoFile] = useState<UploadedFile | null>(null);
+  const [firstRestaurantEnFile, setFirstRestaurantEnFile] = useState<UploadedFile | null>(null);
+  
+  // 제2 학생식당 파일들
+  const [secondRestaurantKoFile, setSecondRestaurantKoFile] = useState<UploadedFile | null>(null);
+  const [secondRestaurantEnFile, setSecondRestaurantEnFile] = useState<UploadedFile | null>(null);
+  
   const [isUploading, setIsUploading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [modalType, setModalType] = useState<'success' | 'error'>('success');
   
-  const firstFileInputRef = useRef<HTMLInputElement>(null);
-  const secondFileInputRef = useRef<HTMLInputElement>(null);
 
   // 모바일 여부 확인(footer 추가 위함)
   const isMobile = useMediaQuery({ maxWidth: 639 });
@@ -36,32 +42,33 @@ const UploadPage = () => {
   };
 
   // 파일 업로드 처리
-  const handleFileUpload = (files: FileList, restaurant: 'first' | 'second') => {
-    const newFiles: UploadedFile[] = [];
+  const handleFileUpload = (file: File, restaurant: 'first' | 'second', language: 'ko' | 'en') => {
+    if (!validateFile(file)) {
+      setModalMessage('엑셀 파일(.xlsx, .xls)만 업로드 가능합니다.');
+      setModalType('error');
+      setShowModal(true);
+      return;
+    }
     
-    Array.from(files).forEach(file => {
-      if (!validateFile(file)) {
-        setModalMessage('엑셀 파일(.xlsx, .xls)만 업로드 가능합니다.');
-        setModalType('error');
-        setShowModal(true);
-        return;
-      }
-      
-      const uploadedFile: UploadedFile = {
-        id: Math.random().toString(36).substring(2, 9),
-        file,
-        name: file.name,
-        size: file.size,
-        uploadTime: new Date()
-      };
-      newFiles.push(uploadedFile);
-    });
+    const uploadedFile: UploadedFile = {
+      id: Math.random().toString(36).substring(2, 9),
+      file,
+      name: file.name,
+      size: file.size,
+      uploadTime: new Date()
+    };
 
-    if (newFiles.length > 0) {
-      if (restaurant === 'first') {
-        setFirstRestaurantFiles(prev => [...prev, ...newFiles]);
+    if (restaurant === 'first') {
+      if (language === 'ko') {
+        setFirstRestaurantKoFile(uploadedFile);
       } else {
-        setSecondRestaurantFiles(prev => [...prev, ...newFiles]);
+        setFirstRestaurantEnFile(uploadedFile);
+      }
+    } else {
+      if (language === 'ko') {
+        setSecondRestaurantKoFile(uploadedFile);
+      } else {
+        setSecondRestaurantEnFile(uploadedFile);
       }
     }
   };
@@ -71,18 +78,28 @@ const UploadPage = () => {
     e.preventDefault();
   };
 
-  const handleDrop = (e: React.DragEvent, restaurant: 'first' | 'second') => {
+  const handleDrop = (e: React.DragEvent, restaurant: 'first' | 'second', language: 'ko' | 'en') => {
     e.preventDefault();
     const files = e.dataTransfer.files;
-    handleFileUpload(files, restaurant);
+    if (files.length > 0) {
+      handleFileUpload(files[0], restaurant, language);
+    }
   };
 
   // 파일 삭제
-  const removeFile = (id: string, restaurant: 'first' | 'second') => {
+  const removeFile = (restaurant: 'first' | 'second', language: 'ko' | 'en') => {
     if (restaurant === 'first') {
-      setFirstRestaurantFiles(prev => prev.filter(file => file.id !== id));
+      if (language === 'ko') {
+        setFirstRestaurantKoFile(null);
+      } else {
+        setFirstRestaurantEnFile(null);
+      }
     } else {
-      setSecondRestaurantFiles(prev => prev.filter(file => file.id !== id));
+      if (language === 'ko') {
+        setSecondRestaurantKoFile(null);
+      } else {
+        setSecondRestaurantEnFile(null);
+      }
     }
   };
 
@@ -97,8 +114,9 @@ const UploadPage = () => {
 
   // 저장 버튼 클릭
   const handleSave = async () => {
-    if (firstRestaurantFiles.length === 0 && secondRestaurantFiles.length === 0) {
-      setModalMessage('최소 하나의 파일을 업로드해주세요.');
+    // 모든 필수 파일이 업로드되었는지 확인
+    if (!firstRestaurantKoFile || !firstRestaurantEnFile || !secondRestaurantKoFile || !secondRestaurantEnFile) {
+      setModalMessage('모든 식당의 한글/영어 파일을 업로드해주세요.');
       setModalType('error');
       setShowModal(true);
       return;
@@ -108,8 +126,10 @@ const UploadPage = () => {
     
     try {
       // TODO: 실제 API 호출로 변경
-      console.log('First Restaurant Files:', firstRestaurantFiles);
-      console.log('Second Restaurant Files:', secondRestaurantFiles);
+      console.log('First Restaurant Ko File:', firstRestaurantKoFile);
+      console.log('First Restaurant En File:', firstRestaurantEnFile);
+      console.log('Second Restaurant Ko File:', secondRestaurantKoFile);
+      console.log('Second Restaurant En File:', secondRestaurantEnFile);
       
       // 임시 지연 (실제 API 호출 시뮬레이션)
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -119,8 +139,10 @@ const UploadPage = () => {
       setShowModal(true);
       
       // 성공 후 파일 목록 초기화
-      setFirstRestaurantFiles([]);
-      setSecondRestaurantFiles([]);
+      setFirstRestaurantKoFile(null);
+      setFirstRestaurantEnFile(null);
+      setSecondRestaurantKoFile(null);
+      setSecondRestaurantEnFile(null);
       
     } catch (error) {
       setModalMessage('파일 업로드 중 오류가 발생했습니다.');
@@ -131,35 +153,39 @@ const UploadPage = () => {
     }
   };
 
-  // 업로드 영역 컴포넌트
-  const UploadArea = ({ 
+  // 개별 파일 업로드 영역 컴포넌트
+  const FileUploadArea = ({ 
     restaurant, 
-    files, 
+    language, 
+    file, 
     fileInputRef 
   }: { 
     restaurant: 'first' | 'second';
-    files: UploadedFile[];
+    language: 'ko' | 'en';
+    file: UploadedFile | null;
     fileInputRef: React.RefObject<HTMLInputElement | null>;
   }) => {
-    const restaurantName = restaurant === 'first' ? '제1 학생식당' : '제2 학생식당';
+    const languageName = language === 'ko' ? '한글' : '영어';
+    const languageColor = language === 'ko' ? 'border-blue-300 hover:border-blue-400' : 'border-green-300 hover:border-green-400';
+    const languageIconColor = language === 'ko' ? 'text-blue-400' : 'text-green-400';
     
     return (
-      <div className="w-full max-w-2xl mx-auto">
-        <h3 className="text-xl font-bold text-gray-800 mb-4">{restaurantName}</h3>
+      <div className="w-full">
+        <h4 className="text-lg font-semibold text-gray-700 mb-3">{languageName} 파일 *</h4>
         
         {/* 드래그 앤 드롭 영역 */}
         <div
-          className="border-2 border-dashed border-orange-300 rounded-lg p-8 text-center hover:border-orange-400 transition-colors cursor-pointer"
+          className={`border-2 border-dashed ${languageColor} rounded-lg p-6 text-center transition-colors cursor-pointer`}
           onDragOver={handleDragOver}
-          onDrop={(e) => handleDrop(e, restaurant)}
+          onDrop={(e) => handleDrop(e, restaurant, language)}
           onClick={() => fileInputRef.current?.click()}
         >
           <div className="text-gray-600">
-            <svg className="mx-auto h-12 w-12 text-orange-400 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+            <svg className={`mx-auto h-10 w-10 ${languageIconColor} mb-3`} stroke="currentColor" fill="none" viewBox="0 0 48 48">
               <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <p className="text-lg font-medium">파일을 드래그하거나 클릭하여 업로드</p>
-            <p className="text-sm text-gray-500 mt-2">엑셀 파일(.xlsx, .xls)만 지원</p>
+            <p className="text-base font-medium">파일을 드래그하거나 클릭하여 업로드</p>
+            <p className="text-sm text-gray-500 mt-1">엑셀 파일(.xlsx, .xls)만 지원</p>
           </div>
         </div>
 
@@ -167,36 +193,70 @@ const UploadPage = () => {
         <input
           ref={fileInputRef}
           type="file"
-          multiple
           accept=".xlsx,.xls"
-          onChange={(e) => e.target.files && handleFileUpload(e.target.files, restaurant)}
+          onChange={(e) => e.target.files && e.target.files[0] && handleFileUpload(e.target.files[0], restaurant, language)}
           className="hidden"
         />
 
-        {/* 업로드된 파일 목록 */}
-        {files.length > 0 && (
-          <div className="mt-4 space-y-2">
-            <h4 className="font-medium text-gray-700">업로드된 파일:</h4>
-            {files.map((file) => (
-              <div key={file.id} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-                <div className="flex-1">
-                  <p className="font-medium text-gray-800">{file.name}</p>
-                  <p className="text-sm text-gray-500">
-                    {formatFileSize(file.size)} • {file.uploadTime.toLocaleString()}
-                  </p>
-                </div>
-                <button
-                  onClick={() => removeFile(file.id, restaurant)}
-                  className="text-red-500 hover:text-red-700 p-1"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+        {/* 업로드된 파일 표시 */}
+        {file && (
+          <div className="mt-3">
+            <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+              <div className="flex-1">
+                <p className="font-medium text-gray-800">{file.name}</p>
+                <p className="text-sm text-gray-500">
+                  {formatFileSize(file.size)} • {file.uploadTime.toLocaleString()}
+                </p>
               </div>
-            ))}
+              <button
+                onClick={() => removeFile(restaurant, language)}
+                className="text-red-500 hover:text-red-700 p-1"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
         )}
+      </div>
+    );
+  };
+
+  // 식당별 업로드 영역 컴포넌트
+  const RestaurantUploadArea = ({ 
+    restaurant 
+  }: { 
+    restaurant: 'first' | 'second';
+  }) => {
+    const restaurantName = restaurant === 'first' ? '제1 학생식당' : '제2 학생식당';
+    const koFile = restaurant === 'first' ? firstRestaurantKoFile : secondRestaurantKoFile;
+    const enFile = restaurant === 'first' ? firstRestaurantEnFile : secondRestaurantEnFile;
+    
+    const koFileInputRef = useRef<HTMLInputElement>(null);
+    const enFileInputRef = useRef<HTMLInputElement>(null);
+    
+    return (
+      <div className="w-full max-w-4xl mx-auto">
+        <h3 className="text-2xl font-bold text-gray-800 mb-6">{restaurantName}</h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* 한글 파일 업로드 */}
+          <FileUploadArea
+            restaurant={restaurant}
+            language="ko"
+            file={koFile}
+            fileInputRef={koFileInputRef}
+          />
+          
+          {/* 영어 파일 업로드 */}
+          <FileUploadArea
+            restaurant={restaurant}
+            language="en"
+            file={enFile}
+            fileInputRef={enFileInputRef}
+          />
+        </div>
       </div>
     );
   };
@@ -231,7 +291,7 @@ const UploadPage = () => {
             
             {/* 서브 제목 */}
             <p className="text-xl text-[#8B4513] font-light tracking-wide mb-6">
-              월간 식단표 엑셀 파일을 업로드해주세요 :)
+              주간 식단표 엑셀 파일을 업로드해주세요 :)
             </p>
             
             {/* 구분선 */}
@@ -246,26 +306,18 @@ const UploadPage = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-12">
+        <div className="space-y-16">
           {/* 제1 학생식당 */}
-          <UploadArea
-            restaurant="first"
-            files={firstRestaurantFiles}
-            fileInputRef={firstFileInputRef}
-          />
+          <RestaurantUploadArea restaurant="first" />
 
           {/* 제2 학생식당 */}
-          <UploadArea
-            restaurant="second"
-            files={secondRestaurantFiles}
-            fileInputRef={secondFileInputRef}
-          />
+          <RestaurantUploadArea restaurant="second" />
 
           {/* 저장 버튼 */}
           <div className="flex justify-center pt-8 mb-12">
             <button
               onClick={handleSave}
-              disabled={isUploading || (firstRestaurantFiles.length === 0 && secondRestaurantFiles.length === 0)}
+              disabled={isUploading || !firstRestaurantKoFile || !firstRestaurantEnFile || !secondRestaurantKoFile || !secondRestaurantEnFile}
               className="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 flex items-center space-x-2"
             >
               {isUploading ? (
