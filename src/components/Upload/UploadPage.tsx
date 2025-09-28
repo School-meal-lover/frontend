@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import axios from 'axios';
 import Modal from './Modal';
 import { useMediaQuery } from 'react-responsive';
 import MobileFooter from '../Mobile/MobileFooter';
@@ -29,7 +30,7 @@ const UploadPage = () => {
   const [modalType, setModalType] = useState<'success' | 'error'>('success');
   
 
-  // 모바일 여부 확인(footer 추가 위함)
+  // 모바일 여부 확인(footer 추가 용도)
   const isMobile = useMediaQuery({ maxWidth: 639 });
 
   // 파일 유효성 검사
@@ -124,30 +125,80 @@ const UploadPage = () => {
 
     setIsUploading(true);
     
-    try {
-      // TODO: 실제 API 호출로 변경
-      console.log('First Restaurant Ko File:', firstRestaurantKoFile);
-      console.log('First Restaurant En File:', firstRestaurantEnFile);
-      console.log('Second Restaurant Ko File:', secondRestaurantKoFile);
-      console.log('Second Restaurant En File:', secondRestaurantEnFile);
+      try {
+        // 제1 학생식당 파일 업로드(KOR/ENG)
+        const formDataFirst = new FormData();
+        formDataFirst.append('excel_ko', firstRestaurantKoFile.file);
+        formDataFirst.append('excel_en', firstRestaurantEnFile.file);
+        
+        const responseFirst = await axios.post(`${API_BASE_URL}/upload/excel`, formDataFirst, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        
+        // 제2 학생식당 파일 업로드(KOR/ENG)
+        const formDataSecond = new FormData();
+        formDataSecond.append('excel_ko', secondRestaurantKoFile.file);
+        formDataSecond.append('excel_en', secondRestaurantEnFile.file);
+        
+        const responseSecond = await axios.post(`${API_BASE_URL}/upload/excel`, formDataSecond, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
       
-      // 임시 지연 (실제 API 호출 시뮬레이션)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      setModalMessage('파일이 성공적으로 업로드되었습니다.');
-      setModalType('success');
-      setShowModal(true);
-      
-      // 성공 후 파일 목록 초기화
-      setFirstRestaurantKoFile(null);
-      setFirstRestaurantEnFile(null);
-      setSecondRestaurantKoFile(null);
-      setSecondRestaurantEnFile(null);
-      
-    } catch (error) {
-      setModalMessage('파일 업로드 중 오류가 발생했습니다.');
-      setModalType('error');
-      setShowModal(true);
+        // 성공 응답 확인
+        if (responseFirst.data.success && responseSecond.data.success) {
+          // 각 식당별 처리 결과 확인
+          const firstKoSuccess = responseFirst.data.result_ko?.success;
+          const firstEnSuccess = responseFirst.data.result_en?.success;
+          const secondKoSuccess = responseSecond.data.result_ko?.success;
+          const secondEnSuccess = responseSecond.data.result_en?.success;
+          
+          if (firstKoSuccess && firstEnSuccess && secondKoSuccess && secondEnSuccess) {
+            // 모든 파일 처리 성공
+            const totalMeals = (responseFirst.data.result_ko?.total_meals || 0) + 
+                              (responseFirst.data.result_en?.total_meals || 0) +
+                              (responseSecond.data.result_ko?.total_meals || 0) + 
+                              (responseSecond.data.result_en?.total_meals || 0);
+            
+            setModalMessage(`🎉 업로드 완료!\n\n총 ${totalMeals}개 식사가 데이터베이스에 저장되었습니다 :)`);
+            setModalType('success');
+            setShowModal(true);
+            
+            // 성공 후 파일 목록 초기화
+            setFirstRestaurantKoFile(null);
+            setFirstRestaurantEnFile(null);
+            setSecondRestaurantKoFile(null);
+            setSecondRestaurantEnFile(null);
+          } else {
+            throw new Error('일부 파일 처리에 실패했습니다.');
+          }
+        } else {
+          throw new Error('파일 업로드에 실패했습니다.');
+        }
+        
+      } catch (error) {
+        console.error('Upload error:', error);
+        
+        let errorMessage = '❌ 업로드 실패\n\n파일을 다시 확인하고 시도해주세요.\n문제가 지속되면 관리자에게 문의하세요.';
+        
+        if (axios.isAxiosError(error)) {
+          if (error.response?.data?.error) {
+            errorMessage = `❌ 업로드 실패\n\n${error.response.data.error}\n\n파일을 다시 확인하고 시도해주세요.`;
+          } else if (error.response?.status === 500) {
+            errorMessage = '❌ 서버 오류\n\n서버에 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.';
+          } else if (error.response?.status === 400) {
+            errorMessage = '❌ 파일 형식 오류\n\n엑셀 파일(.xlsx, .xls)만 업로드 가능합니다.\n파일 형식을 확인해주세요.';
+          } else if (error.response?.status === 413) {
+            errorMessage = '❌ 파일 크기 초과\n\n파일 크기가 너무 큽니다.\n더 작은 파일로 시도해주세요.';
+          }
+        }
+        
+        setModalMessage(errorMessage);
+        setModalType('error');
+        setShowModal(true);
     } finally {
       setIsUploading(false);
     }
