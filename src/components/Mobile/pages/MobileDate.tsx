@@ -2,7 +2,7 @@ import { useNavigate} from '@tanstack/react-router'
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import axios from "axios";
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback, useMemo} from 'react';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -135,7 +135,50 @@ function MenuDisplay({ date }: MenuDisplayProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedRestaurant, setSelectedRestaurant] = useState<number>(1);
+  //터치 시작, 끝 좌표
+  const [touchStart, setTouchStart] = useState<{x: number, y:number} | null>(null);
+  //터치 끝 좌표
+  const [touchEnd, setTouchEnd] = useState<{x: number, y:number} | null>(null);
+  //최소 스와이프 거리
+  const minSwipeDistance = 50;
+  //스와이프 중 상태
+  const [isSwiping, setIsSwiping] = useState(false);
 
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.targetTouches.length > 1) return;
+    const touch = e.targetTouches[0];
+    setTouchStart({x: touch.clientX, y: touch.clientY});
+    setTouchEnd(null);
+    setIsSwiping(true);
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    const touch = e.targetTouches[0];
+    setTouchEnd({x: touch.clientX, y: touch.clientY});
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!touchStart || !touchEnd) return;
+
+    const xDiff = touchStart.x - touchEnd.x;
+    const yDiff = touchStart.y - touchEnd.y;
+
+    // 수평 스와이프인지 확인
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+      if (xDiff > minSwipeDistance && selectedRestaurant === 1) {
+        // 왼쪽으로 스와이프 → 2학생식당으로
+        setSelectedRestaurant(2);
+      } else if (xDiff < -minSwipeDistance && selectedRestaurant === 2) {
+        // 오른쪽으로 스와이프 → 1학생식당으로
+        setSelectedRestaurant(1);
+      }
+    }
+    
+    // 스와이프 상태 초기화
+    setIsSwiping(false);
+    setTouchStart(null);
+    setTouchEnd(null);
+  }, [touchStart, touchEnd, selectedRestaurant, minSwipeDistance]);
   const restaurants = [
     { name: "제1 학생식당", number: 1 },
     { name: "제2 학생식당", number: 2 }
@@ -181,7 +224,12 @@ function MenuDisplay({ date }: MenuDisplayProps) {
   const dinnerItems = dayData?.meals?.["Dinner"]?.menu_items;
 
   return(
-    <div className="">
+    <div 
+      className={`transition-all duration-200`}
+      onTouchStart={handleTouchStart} 
+      onTouchMove={handleTouchMove} 
+      onTouchEnd={handleTouchEnd}
+    >
       {/* 식당 선택 div */}
       <div className="flex justify-center items-center mb-10">
         {restaurants.map((restaurant) => (
