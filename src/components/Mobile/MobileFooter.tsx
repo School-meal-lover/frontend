@@ -58,8 +58,8 @@ const MobileFooter = () => {
             </h4>
             <ul className="space-y-2">
               <li>
-                <a href="https://sportal.gist.ac.kr/" target="_blank" rel="noopener noreferrer" className="text-orange-100 hover:text-white text-xs transition-colors">
-                  GIST 포털
+                <a href="https://ziggle.gistory.me" target="_blank" rel="noopener noreferrer" className="text-orange-100 hover:text-white text-sm transition-colors">
+                  지글
                 </a>
               </li>
               <li>
