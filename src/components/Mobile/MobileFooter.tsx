@@ -73,7 +73,7 @@ const MobileFooter = () => {
 
         {/* 저작권 정보 */}
         <div className="text-center border-t border-white/20 pt-4">
-          <p className="text-orange-100 text-xs">ⓒ 2024. INFOTEAM all rights reserved.</p>
+          <p className="text-orange-100 text-xs">ⓒ 2024. 꼬르륵 all rights reserved.</p>
         </div>
       </div>
     </footer>
