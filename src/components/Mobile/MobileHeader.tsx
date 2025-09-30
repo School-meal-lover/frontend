@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 
 const navList = [
@@ -12,8 +12,40 @@ export default function MobileHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selected, setSelected] = useState("학식 메뉴");
 
+  // 모달이 열렸을 때 배경 스크롤 방지
+  useEffect(() => {
+    if (menuOpen) {
+      // 현재 스크롤 위치 저장
+      const scrollY = window.scrollY;
+      // body 스크롤 방지
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+    } else {
+      // 스크롤 복원
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY) * -1);
+      }
+    }
+
+    // 컴포넌트 언마운트 시 스타일 초기화 및 스크롤 복원
+    return () => {
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY) * -1);
+      }
+    };
+  }, [menuOpen]);
+
   return (
-    <header className="w-full h-[55px] px-4 py-2 shadow relative flex items-center justify-between z-50 bg-white">
+    <header className="sticky top-0 w-full h-[55px] px-4 py-2 shadow relative flex items-center justify-between z-50 bg-white">
       {/* 상단 navigation bar */}
       <div className="flex items-center">
         <Link to="/">
