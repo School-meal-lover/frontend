@@ -67,7 +67,7 @@ const DesktopFooter = () => {
             </ul>
           </div>
         </div>
-        <p className="text-orange-100 text-center text-xs border-t border-white/20 pt-4">ⓒ 2024. 꼬르륵 all rights reserved.</p>
+        <p className="text-orange-100 text-center text-xs border-t border-white/20 pt-4">ⓒ 2025. 꼬르륵 all rights reserved.</p>
       </div>
     </footer>
   );
