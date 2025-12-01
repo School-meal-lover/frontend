@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as UploadImport } from './routes/upload'
+import { Route as SettingsImport } from './routes/settings'
 import { Route as IntroduceImport } from './routes/introduce'
 import { Route as R404PageImport } from './routes/404Page'
 import { Route as IndexImport } from './routes/index'
@@ -24,6 +25,12 @@ import { Route as MenuDateImport } from './routes/menu/$date'
 const UploadRoute = UploadImport.update({
   id: '/upload',
   path: '/upload',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SettingsRoute = SettingsImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntroduceImport
       parentRoute: typeof rootRoute
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsImport
+      parentRoute: typeof rootRoute
+    }
     '/upload': {
       id: '/upload'
       path: '/upload'
@@ -125,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/404Page': typeof R404PageRoute
   '/introduce': typeof IntroduceRoute
+  '/settings': typeof SettingsRoute
   '/upload': typeof UploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
@@ -135,6 +150,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/404Page': typeof R404PageRoute
   '/introduce': typeof IntroduceRoute
+  '/settings': typeof SettingsRoute
   '/upload': typeof UploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
@@ -146,6 +162,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/404Page': typeof R404PageRoute
   '/introduce': typeof IntroduceRoute
+  '/settings': typeof SettingsRoute
   '/upload': typeof UploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
@@ -158,6 +175,7 @@ export interface FileRouteTypes {
     | '/'
     | '/404Page'
     | '/introduce'
+    | '/settings'
     | '/upload'
     | '/menu/$date'
     | '/menu/congestion'
@@ -167,6 +185,7 @@ export interface FileRouteTypes {
     | '/'
     | '/404Page'
     | '/introduce'
+    | '/settings'
     | '/upload'
     | '/menu/$date'
     | '/menu/congestion'
@@ -176,6 +195,7 @@ export interface FileRouteTypes {
     | '/'
     | '/404Page'
     | '/introduce'
+    | '/settings'
     | '/upload'
     | '/menu/$date'
     | '/menu/congestion'
@@ -187,6 +207,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   R404PageRoute: typeof R404PageRoute
   IntroduceRoute: typeof IntroduceRoute
+  SettingsRoute: typeof SettingsRoute
   UploadRoute: typeof UploadRoute
   MenuDateRoute: typeof MenuDateRoute
   MenuCongestionRoute: typeof MenuCongestionRoute
@@ -197,6 +218,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   R404PageRoute: R404PageRoute,
   IntroduceRoute: IntroduceRoute,
+  SettingsRoute: SettingsRoute,
   UploadRoute: UploadRoute,
   MenuDateRoute: MenuDateRoute,
   MenuCongestionRoute: MenuCongestionRoute,
@@ -216,6 +238,7 @@ export const routeTree = rootRoute
         "/",
         "/404Page",
         "/introduce",
+        "/settings",
         "/upload",
         "/menu/$date",
         "/menu/congestion",
@@ -230,6 +253,9 @@ export const routeTree = rootRoute
     },
     "/introduce": {
       "filePath": "introduce.tsx"
+    },
+    "/settings": {
+      "filePath": "settings.tsx"
     },
     "/upload": {
       "filePath": "upload.tsx"

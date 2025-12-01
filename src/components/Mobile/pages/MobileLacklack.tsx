@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
+import { useTranslation } from "react-i18next";
 
 // 개별 이미지 스피너 컴포넌트
 const ImageSpinner = () => (
@@ -11,24 +12,35 @@ const ImageSpinner = () => (
 
 //🎯 interface 선언
 //-----------------------------------
+type CategoryKey = 'stew' | 'pork' | 'beverage' | 'special';
+
+interface LacklackMenuItem {
+    category: CategoryKey;
+    nameKey: string;
+    name_ko: string;
+    name_en: string;
+    price: string;
+    src: string;
+}
+
 interface DateNavigatorProps {
     baseDate: Date;
     setBaseDate: React.Dispatch<React.SetStateAction<Date>>;
 }
 
 interface CategoryDisplayProps {
-    selectedCategory: string;
-    setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+    selectedCategory: CategoryKey;
+    setSelectedCategory: React.Dispatch<React.SetStateAction<CategoryKey>>;
 }
 
 interface MenuDisplayProps {
-    selectedCategory: string;
+    selectedCategory: CategoryKey;
 }
 //-----------------------------------
 
 export default function MobileLacklack() {
     const [baseDate, setBaseDate] = useState(dayjs().toDate());
-    const [selectedCategory, setSelectedCategory] = useState("찌개 / 라면")
+    const [selectedCategory, setSelectedCategory] = useState<CategoryKey>('stew')
 
     // 첫 번째 카테고리 이미지 프리로딩
     useEffect(() => {
@@ -59,11 +71,12 @@ export default function MobileLacklack() {
 //-----------------------------🔥DateNeviagtor🔥-----------------------------
 //화살표로 빠르게 주(week) 이동하는 Component
 function DateNevigator({ baseDate, setBaseDate }: DateNavigatorProps) {
-    //한글 로케일 설정
-    dayjs.locale("ko");
+    const { t, i18n } = useTranslation();
+    //로케일 설정 (한글/영어)
+    dayjs.locale(i18n.language === 'ko' ? 'ko' : 'en');
     //날짜 formatting
-    const formatKoreanDate = (date: Date): string => {
-        return dayjs(date).format("YYYY년 MM월 DD일 (dd)")
+    const formatDate = (date: Date): string => {
+        return dayjs(date).format(t('date.format'));
     };
     //화살표 누름에 따라 +/- 1일 하는 함수
     const handleDayChange = (direction: number) => {
@@ -76,7 +89,7 @@ function DateNevigator({ baseDate, setBaseDate }: DateNavigatorProps) {
             <img className="w-10 h-10 hover:brightness-95 transition" alt="leftArrow" src="../leftArrow.svg"
                 onClick={() => handleDayChange(-1)} />
             <span className="text-lg font-bold text-center whitespace-nowrap">
-                {formatKoreanDate(baseDate)}
+                {formatDate(baseDate)}
             </span>
             <img className="w-10 h-10 hover:brightness-95 transition" alt="rightArrow" src="../rightArrow.svg"
                 onClick={() => handleDayChange(1)} />
@@ -85,16 +98,22 @@ function DateNevigator({ baseDate, setBaseDate }: DateNavigatorProps) {
 }
 
 function CategoryDisplay({ selectedCategory, setSelectedCategory }: CategoryDisplayProps) {
-    const categories = ["찌개 / 라면", "돈가스 / 밥", "음료수", "특별메뉴"];
+    const { t } = useTranslation();
+    const categories: Array<{ key: CategoryKey; label: string }> = [
+        { key: 'stew', label: t('lacklack.categories.stew') },
+        { key: 'pork', label: t('lacklack.categories.pork') },
+        { key: 'beverage', label: t('lacklack.categories.beverage') },
+        { key: 'special', label: t('lacklack.categories.special') }
+    ];
 
     return (
         <div className="border-1 border-[#B7B7B7] rounded-xl w-full mb-10">
             <div className="grid grid-cols-2">
                 {categories.map((category) => (
-                    <div className={`text-center p-2 rounded-xl hover:cursor-pointer font-medium transition duration-300
-                    ${selectedCategory === category ? "text-white bg-[#FF904C]" : "text-gray-500"}`}
-                        onClick={() => setSelectedCategory(category)}>
-                        {category}
+                    <div key={category.key} className={`text-center p-2 rounded-xl hover:cursor-pointer font-medium transition duration-300
+                    ${selectedCategory === category.key ? "text-white bg-[#FF904C]" : "text-gray-500"}`}
+                        onClick={() => setSelectedCategory(category.key)}>
+                        {category.label}
                     </div>
                 ))}
             </div>
@@ -103,30 +122,49 @@ function CategoryDisplay({ selectedCategory, setSelectedCategory }: CategoryDisp
 }
 
 function MenuDisplay({ selectedCategory }: MenuDisplayProps) {
+    const { t, i18n } = useTranslation();
     const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
 
-    const allMenuData = [
-        { category: "찌개 / 라면", name: "김치찌개", price: "5,000", src: "../lacklack_01.webp" },
-        { category: "찌개 / 라면", name: "김치찌개+라면사리", price: "5,500", src: "../lacklack_02.webp" },
-        { category: "찌개 / 라면", name: "애호박찌개", price: "5,000", src: "../lacklack_03.webp" },
-        { category: "찌개 / 라면", name: "애호박찌개+라면사리", price: "5,000", src: "../lacklack_04.webp" },
-        { category: "찌개 / 라면", name: "버섯불고기", price: "6,500", src: "../lacklack_05.webp" },
-        { category: "찌개 / 라면", name: "라면", price: "3,000", src: "../lacklack_06.webp" },
-        { category: "찌개 / 라면", name: "계란라면", price: "3,500", src: "../lacklack_07.webp" },
-        { category: "찌개 / 라면", name: "치즈라면", price: "3,500", src: "../lacklack_08.webp" },
-        { category: "돈가스 / 밥", name: "치즈돈가스", price: "6,500", src: "../lacklack_09.webp" },
-        { category: "돈가스 / 밥", name: "치킨가스", price: "5,500", src: "../lacklack_10.webp" },
-        { category: "돈가스 / 밥", name: "웰빙비빔밥", price: "5,000", src: "../lacklack_11.webp" },
-        { category: "돈가스 / 밥", name: "제육덮밥", price: "6,000", src: "../lacklack_12.webp" },
-        { category: "돈가스 / 밥", name: "김치볶음밥", price: "5,000", src: "../lacklack_13.webp" },
-        { category: "돈가스 / 밥", name: "야채볶음밥", price: "5,000", src: "../lacklack_14.webp" },
-        { category: "돈가스 / 밥", name: "오므라이스", price: "5,000", src: "../lacklack_15.webp" },
-        { category: "돈가스 / 밥", name: "참치컵밥", price: "5,000", src: "../lacklack_16.webp" },
-        { category: "음료수", name: "콜라", price: "1,200", src: "../lacklack_17.webp" },
-        { category: "음료수", name: "스프라이트", price: "1,200", src: "../lacklack_18.webp" },
-        { category: "음료수", name: "환타", price: "1,500", src: "../lacklack_19.webp" },
-    ]
-    const menuData = allMenuData.filter(item => item.category === selectedCategory)
+    const allMenuData: LacklackMenuItem[] = [
+        { category: 'stew', nameKey: 'kimchiStew', name_ko: "김치찌개", name_en: "Kimchi Stew", price: "5,000", src: "../lacklack_01.webp" },
+        { category: 'stew', nameKey: 'kimchiStewRamen', name_ko: "김치찌개+라면사리", name_en: "Kimchi Stew + Ramen", price: "5,500", src: "../lacklack_02.webp" },
+        { category: 'stew', nameKey: 'zucchiniStew', name_ko: "애호박찌개", name_en: "Zucchini Stew", price: "5,000", src: "../lacklack_03.webp" },
+        { category: 'stew', nameKey: 'zucchiniStewRamen', name_ko: "애호박찌개+라면사리", name_en: "Zucchini Stew + Ramen", price: "5,000", src: "../lacklack_04.webp" },
+        { category: 'stew', nameKey: 'mushroomBulgogi', name_ko: "버섯불고기", name_en: "Mushroom Bulgogi", price: "6,500", src: "../lacklack_05.webp" },
+        { category: 'stew', nameKey: 'ramen', name_ko: "라면", name_en: "Ramen", price: "3,000", src: "../lacklack_06.webp" },
+        { category: 'stew', nameKey: 'eggRamen', name_ko: "계란라면", name_en: "Egg Ramen", price: "3,500", src: "../lacklack_07.webp" },
+        { category: 'stew', nameKey: 'cheeseRamen', name_ko: "치즈라면", name_en: "Cheese Ramen", price: "3,500", src: "../lacklack_08.webp" },
+        { category: 'pork', nameKey: 'cheesePork', name_ko: "치즈돈가스", name_en: "Cheese Pork Cutlet", price: "6,500", src: "../lacklack_09.webp" },
+        { category: 'pork', nameKey: 'chickenCutlet', name_ko: "치킨가스", name_en: "Chicken Cutlet", price: "5,500", src: "../lacklack_10.webp" },
+        { category: 'pork', nameKey: 'bibimbap', name_ko: "웰빙비빔밥", name_en: "Wellbeing Bibimbap", price: "5,000", src: "../lacklack_11.webp" },
+        { category: 'pork', nameKey: 'spicyPork', name_ko: "제육덮밥", name_en: "Spicy Pork Rice Bowl", price: "6,000", src: "../lacklack_12.webp" },
+        { category: 'pork', nameKey: 'kimchiFried', name_ko: "김치볶음밥", name_en: "Kimchi Fried Rice", price: "5,000", src: "../lacklack_13.webp" },
+        { category: 'pork', nameKey: 'veggieFried', name_ko: "야채볶음밥", name_en: "Vegetable Fried Rice", price: "5,000", src: "../lacklack_14.webp" },
+        { category: 'pork', nameKey: 'omurice', name_ko: "오므라이스", name_en: "Omurice", price: "5,000", src: "../lacklack_15.webp" },
+        { category: 'pork', nameKey: 'tunaRice', name_ko: "참치컵밥", name_en: "Tuna Cup Rice", price: "5,000", src: "../lacklack_16.webp" },
+        { category: 'beverage', nameKey: 'cola', name_ko: "콜라", name_en: "Coke", price: "1,200", src: "../lacklack_17.webp" },
+        { category: 'beverage', nameKey: 'sprite', name_ko: "스프라이트", name_en: "Sprite", price: "1,200", src: "../lacklack_18.webp" },
+        { category: 'beverage', nameKey: 'fanta', name_ko: "환타", name_en: "Fanta", price: "1,500", src: "../lacklack_19.webp" },
+    ];
+
+    const menuData = allMenuData.filter(item => item.category === selectedCategory);
+
+    // 메뉴 아이템 이름 표시 함수 (i18n with fallback)
+    const getMenuItemName = (item: LacklackMenuItem) => {
+        // 1순위: i18n 번역
+        const translationKey = `lacklack.items.${item.nameKey}`;
+        if (i18n.exists(translationKey)) {
+            return t(translationKey);
+        }
+
+        // 2순위: 언어별 필드 fallback
+        if (i18n.language === 'en' && item.name_en) {
+            return item.name_en;
+        }
+
+        // 3순위: 기본 한글
+        return item.name_ko;
+    };
 
     const handleImageLoad = (src: string) => {
         setLoadedImages(prev => new Set([...prev, src]));
@@ -134,22 +172,22 @@ function MenuDisplay({ selectedCategory }: MenuDisplayProps) {
 
     return (
         <div className="border-t-1 border-[#B7B7B7]">
-            <h1 className="font-medium text-xl my-4">락락 메뉴 &gt; {selectedCategory}</h1>
+            <h1 className="font-medium text-xl my-4">{t('lacklack.title')} {t(`lacklack.categories.${selectedCategory}`)}</h1>
             <div className="grid grid-cols-1 [@media(min-width:380px)]:grid-cols-2 gap-4">
                 {menuData.map((item) => (
-                    <div key={item.name} className="border border-[#B7B7B7] rounded-[10px] shadow-xl p-2">
+                    <div key={item.nameKey} className="border border-[#B7B7B7] rounded-[10px] shadow-xl p-2">
                         <div className="w-full h-50 [@media(min-width:380px)]:h-40 relative">
                             {!loadedImages.has(item.src) && <ImageSpinner />}
                             <img
                                 src={item.src}
                                 loading="lazy"
-                                alt={item.name}
+                                alt={getMenuItemName(item)}
                                 onLoad={() => handleImageLoad(item.src)}
-                                className={`w-full h-full rounded-xl ${selectedCategory === "음료수" ? "object-contain" : "object-cover"} ${!loadedImages.has(item.src) ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
+                                className={`w-full h-full rounded-xl ${selectedCategory === 'beverage' ? "object-contain" : "object-cover"} ${!loadedImages.has(item.src) ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
                             />
                         </div>
-                        <div className="mt-2 font-bold">{item.name}</div>
-                        <div className="text-sm text-gray-500">{item.price}원</div>
+                        <div className="mt-2 font-bold">{getMenuItemName(item)}</div>
+                        <div className="text-sm text-gray-500">{item.price}{t('currency.won')}</div>
                     </div>
                 ))}
             </div>

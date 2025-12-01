@@ -63,7 +63,7 @@ export default function DesktopIntroduce() {
                 </div>
                 <div className="border border-gray-300 mt-20"></div>
                 {/* 개발 예정 기능 섹션 */}
-                <div className="mt-20">
+                <div className="mt-20" style={{ display: 'none' }}>
                     <div className="text-center mb-16">
                         <h2 className="text-3xl font-bold text-gray-800 mb-4">앞으로 추가될 기능들</h2>
                     </div>

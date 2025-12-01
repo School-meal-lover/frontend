@@ -66,7 +66,7 @@ export default function MobileIntroduce() {
                 <div className="border border-gray-300 mt-12"></div>
 
                 {/* 개발 예정 기능 섹션 - 모바일용 */}
-                <div className="mt-12">
+                <div className="mt-12" style={{ display: 'none' }}>
                     <div className="text-center mb-8">
                         <h2 className="text-xl font-bold text-gray-800 mb-3">앞으로 추가될 기능들</h2>
                     </div>

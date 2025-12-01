@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import "./global.css";
+import "./i18n";
 import { registerSW } from "virtual:pwa-register";
 
 const router = createRouter({ routeTree });
@@ -24,6 +25,6 @@ if (!rootElement.innerHTML) {
 }
 
 const updateSW = registerSW({
-  onNeedRefresh() {},
-  onOfflineReady() {},
+  onNeedRefresh() { },
+  onOfflineReady() { },
 });

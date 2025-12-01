@@ -1,0 +1,92 @@
+{
+    "nav": {
+        "menu": "Meal Menu",
+        "lacklack": "Lacklack Menu",
+        "team": "Team Haksamoh",
+        "settings": "Settings"
+    },
+    "meal": {
+        "breakfast": "Breakfast",
+        "lunch": "Lunch",
+        "dinner": "Dinner"
+    },
+    "time": {
+        "breakfast": "(08:00-09:00)",
+        "lunch": "(11:30-13:30)",
+        "dinner": "(17:00-18:30)"
+    },
+    "restaurant": {
+        "first": "Restaurant 1",
+        "second": "Restaurant 2"
+    },
+    "empty": {
+        "breakfast": "No breakfast menu available.",
+        "lunch": "No lunch menu available.",
+        "dinner": "No dinner menu available."
+    },
+    "currency": {
+        "won": "won"
+    },
+    "date": {
+        "year": "",
+        "month": "/",
+        "day": "/",
+        "format": "YYYY/MM/DD (ddd)"
+    },
+    "lacklack": {
+        "title": "Lacklack Menu >",
+        "categories": {
+            "stew": "Stew / Ramen",
+            "pork": "Pork Cutlet / Rice",
+            "beverage": "Beverages",
+            "special": "Special Menu"
+        },
+        "items": {
+            "kimchiStew": "Kimchi Stew",
+            "kimchiStewRamen": "Kimchi Stew + Ramen",
+            "zucchiniStew": "Zucchini Stew",
+            "zucchiniStewRamen": "Zucchini Stew + Ramen",
+            "mushroomBulgogi": "Mushroom Bulgogi",
+            "ramen": "Ramen",
+            "eggRamen": "Egg Ramen",
+            "cheeseRamen": "Cheese Ramen",
+            "cheesePork": "Cheese Pork Cutlet",
+            "chickenCutlet": "Chicken Cutlet",
+            "bibimbap": "Wellbeing Bibimbap",
+            "spicyPork": "Spicy Pork Rice Bowl",
+            "kimchiFried": "Kimchi Fried Rice",
+            "veggieFried": "Vegetable Fried Rice",
+            "omurice": "Omurice",
+            "tunaRice": "Tuna Cup Rice",
+            "cola": "Coke",
+            "sprite": "Sprite",
+            "fanta": "Fanta"
+        }
+    },
+    "fixedBreakfast": {
+        "cereal": "Cereal & Milk",
+        "toast": "Toast & Jam",
+        "salad": "Vegetable Salad*D"
+    },
+    "notFound": {
+        "title": "404",
+        "message": "Page Not Found",
+        "button": "Go Home"
+    },
+    "settings": {
+        "title": "Settings",
+        "language": "Language",
+        "korean": "한글",
+        "english": "English"
+    },
+    "footer": {
+        "tagline": "Choose your meal wisely",
+        "about": "About",
+        "bugReport": "Report Bug",
+        "gistFacilities": "GIST Facilities",
+        "shortcuts": "Shortcuts",
+        "ziggle": "Ziggle",
+        "gistWebsite": "GIST Website",
+        "copyright": "ⓒ 2025. Grrrrr all rights reserved."
+    }
+}
