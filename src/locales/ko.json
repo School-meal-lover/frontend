@@ -79,6 +79,38 @@
         "korean": "한글",
         "english": "English"
     },
+    "notifications": {
+        "title": "푸시 알림",
+        "enable": "푸시 알림 받기",
+        "mealsTitle": "식사 알림 설정",
+        "breakfast": "조식",
+        "lunch": "중식",
+        "dinner": "석식",
+        "daysTitle": "알림 받을 요일",
+        "weekdays": "평일",
+        "weekends": "주말",
+        "pwaNotInstalled": {
+            "title": "PWA 설치 필요",
+            "message": "푸시 알림을 사용하려면 앱을 설치해야 합니다.",
+            "install": "앱 설치하기"
+        },
+        "permissionNeeded": {
+            "title": "알림 권한 필요",
+            "message": "푸시 알림을 받으려면 알림 권한을 허용해주세요.",
+            "allow": "권한 허용하기"
+        },
+        "permissionDenied": {
+            "title": "알림 권한이 거부되었습니다",
+            "message": "브라우저 설정에서 알림 권한을 직접 활성화해주세요.",
+            "helpLinks": "도움말: Chrome | Safari | 삼성인터넷"
+        }
+    },
+    "pwaInstallModal": {
+        "title": "알림을 받으시겠어요?",
+        "message": "조식, 중식, 석식 시간에 맞춰 메뉴 확인 알림을 보내드릴 수 있어요.",
+        "accept": "받기",
+        "decline": "나중에"
+    },
     "footer": {
         "tagline": "오늘의 학식, 똑똑하게 선택하다",
         "about": "소개",

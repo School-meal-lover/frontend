@@ -79,6 +79,38 @@
         "korean": "한글",
         "english": "English"
     },
+    "notifications": {
+        "title": "Push Notifications",
+        "enable": "Enable Push Notifications",
+        "mealsTitle": "Meal Notifications",
+        "breakfast": "Breakfast",
+        "lunch": "Lunch",
+        "dinner": "Dinner",
+        "daysTitle": "Days to Receive Notifications",
+        "weekdays": "Weekdays",
+        "weekends": "Weekends",
+        "pwaNotInstalled": {
+            "title": "PWA Installation Required",
+            "message": "You need to install the app to use push notifications.",
+            "install": "Install App"
+        },
+        "permissionNeeded": {
+            "title": "Notification Permission Required",
+            "message": "Please allow notification permission to receive push notifications.",
+            "allow": "Allow Permission"
+        },
+        "permissionDenied": {
+            "title": "Notification Permission Denied",
+            "message": "Please enable notification permission in your browser settings.",
+            "helpLinks": "Help: Chrome | Safari | Samsung Internet"
+        }
+    },
+    "pwaInstallModal": {
+        "title": "Would you like to receive notifications?",
+        "message": "We can send you reminders to check the menu for breakfast, lunch, and dinner.",
+        "accept": "Yes",
+        "decline": "Later"
+    },
     "footer": {
         "tagline": "Choose your meal wisely",
         "about": "About",
