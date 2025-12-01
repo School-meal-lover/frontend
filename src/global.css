@@ -6,3 +6,17 @@
 body {
     font-family: 'Pretendard', sans-serif;
 }
+
+/* PWA Install Modal fadeIn 애니메이션 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.pwa-install-modal-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}

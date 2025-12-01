@@ -28,3 +28,6 @@ dist-ssr
 .env.development
 .env.production
 .env.*.local
+
+# PWA dev distribution
+dev-dist
