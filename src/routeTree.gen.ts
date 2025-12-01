@@ -12,10 +12,10 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as UploadImport } from './routes/upload'
+import { Route as IntroduceImport } from './routes/introduce'
 import { Route as R404PageImport } from './routes/404Page'
 import { Route as IndexImport } from './routes/index'
 import { Route as MenuLacklackImport } from './routes/menu/lacklack'
-import { Route as MenuIntroduceImport } from './routes/menu/introduce'
 import { Route as MenuCongestionImport } from './routes/menu/congestion'
 import { Route as MenuDateImport } from './routes/menu/$date'
 
@@ -24,6 +24,12 @@ import { Route as MenuDateImport } from './routes/menu/$date'
 const UploadRoute = UploadImport.update({
   id: '/upload',
   path: '/upload',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const IntroduceRoute = IntroduceImport.update({
+  id: '/introduce',
+  path: '/introduce',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -42,12 +48,6 @@ const IndexRoute = IndexImport.update({
 const MenuLacklackRoute = MenuLacklackImport.update({
   id: '/menu/lacklack',
   path: '/menu/lacklack',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const MenuIntroduceRoute = MenuIntroduceImport.update({
-  id: '/menu/introduce',
-  path: '/menu/introduce',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -81,6 +81,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof R404PageImport
       parentRoute: typeof rootRoute
     }
+    '/introduce': {
+      id: '/introduce'
+      path: '/introduce'
+      fullPath: '/introduce'
+      preLoaderRoute: typeof IntroduceImport
+      parentRoute: typeof rootRoute
+    }
     '/upload': {
       id: '/upload'
       path: '/upload'
@@ -102,13 +109,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MenuCongestionImport
       parentRoute: typeof rootRoute
     }
-    '/menu/introduce': {
-      id: '/menu/introduce'
-      path: '/menu/introduce'
-      fullPath: '/menu/introduce'
-      preLoaderRoute: typeof MenuIntroduceImport
-      parentRoute: typeof rootRoute
-    }
     '/menu/lacklack': {
       id: '/menu/lacklack'
       path: '/menu/lacklack'
@@ -124,20 +124,20 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/404Page': typeof R404PageRoute
+  '/introduce': typeof IntroduceRoute
   '/upload': typeof UploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
-  '/menu/introduce': typeof MenuIntroduceRoute
   '/menu/lacklack': typeof MenuLacklackRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/404Page': typeof R404PageRoute
+  '/introduce': typeof IntroduceRoute
   '/upload': typeof UploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
-  '/menu/introduce': typeof MenuIntroduceRoute
   '/menu/lacklack': typeof MenuLacklackRoute
 }
 
@@ -145,10 +145,10 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/404Page': typeof R404PageRoute
+  '/introduce': typeof IntroduceRoute
   '/upload': typeof UploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
-  '/menu/introduce': typeof MenuIntroduceRoute
   '/menu/lacklack': typeof MenuLacklackRoute
 }
 
@@ -157,28 +157,28 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/404Page'
+    | '/introduce'
     | '/upload'
     | '/menu/$date'
     | '/menu/congestion'
-    | '/menu/introduce'
     | '/menu/lacklack'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/404Page'
+    | '/introduce'
     | '/upload'
     | '/menu/$date'
     | '/menu/congestion'
-    | '/menu/introduce'
     | '/menu/lacklack'
   id:
     | '__root__'
     | '/'
     | '/404Page'
+    | '/introduce'
     | '/upload'
     | '/menu/$date'
     | '/menu/congestion'
-    | '/menu/introduce'
     | '/menu/lacklack'
   fileRoutesById: FileRoutesById
 }
@@ -186,20 +186,20 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   R404PageRoute: typeof R404PageRoute
+  IntroduceRoute: typeof IntroduceRoute
   UploadRoute: typeof UploadRoute
   MenuDateRoute: typeof MenuDateRoute
   MenuCongestionRoute: typeof MenuCongestionRoute
-  MenuIntroduceRoute: typeof MenuIntroduceRoute
   MenuLacklackRoute: typeof MenuLacklackRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   R404PageRoute: R404PageRoute,
+  IntroduceRoute: IntroduceRoute,
   UploadRoute: UploadRoute,
   MenuDateRoute: MenuDateRoute,
   MenuCongestionRoute: MenuCongestionRoute,
-  MenuIntroduceRoute: MenuIntroduceRoute,
   MenuLacklackRoute: MenuLacklackRoute,
 }
 
@@ -215,10 +215,10 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/404Page",
+        "/introduce",
         "/upload",
         "/menu/$date",
         "/menu/congestion",
-        "/menu/introduce",
         "/menu/lacklack"
       ]
     },
@@ -228,6 +228,9 @@ export const routeTree = rootRoute
     "/404Page": {
       "filePath": "404Page.tsx"
     },
+    "/introduce": {
+      "filePath": "introduce.tsx"
+    },
     "/upload": {
       "filePath": "upload.tsx"
     },
@@ -236,9 +239,6 @@ export const routeTree = rootRoute
     },
     "/menu/congestion": {
       "filePath": "menu/congestion.tsx"
-    },
-    "/menu/introduce": {
-      "filePath": "menu/introduce.tsx"
     },
     "/menu/lacklack": {
       "filePath": "menu/lacklack.tsx"

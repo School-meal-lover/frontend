@@ -1,14 +1,23 @@
-import { Link } from "@tanstack/react-router";
-import { useState } from 'react';
+import { Link, useLocation } from "@tanstack/react-router";
+import { useState, useEffect } from 'react';
 
 const DesktopHeader = () => {
+  const location = useLocation();
   const [selectedNav, setSelectedNav] = useState<string>("학식 메뉴");
 
   const navList = [
     { link: '/', name: "학식 메뉴" },
     { link: '/menu/lacklack', name: "락락 메뉴" },
-    { link: '/menu/introduce', name: "Team 학사모" }
+    { link: '/introduce', name: "Team 학사모" }
   ];
+
+  // Sync selectedNav with current route
+  useEffect(() => {
+    const currentNav = navList.find(nav => nav.link === location.pathname);
+    if (currentNav) {
+      setSelectedNav(currentNav.name);
+    }
+  }, [location.pathname]);
 
   return (
     <header className="w-full h-[55px] px-4 py-2 shadow flex items-center justify-between relative">
