@@ -14,6 +14,29 @@ const isStandalone = () => {
 
 const isIos = () => /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 
+// localStorage key for tracking last shown time
+const LAST_SHOWN_KEY = "pwa-install-prompt-last-shown";
+const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+// Check if 24 hours have passed since last shown
+const shouldShowPrompt = (): boolean => {
+  const lastShown = localStorage.getItem(LAST_SHOWN_KEY);
+
+  if (!lastShown) {
+    return true; // Never shown before
+  }
+
+  const lastShownTime = parseInt(lastShown, 10);
+  const currentTime = Date.now();
+
+  return (currentTime - lastShownTime) >= TWENTY_FOUR_HOURS;
+};
+
+// Record the current time as last shown
+const recordPromptShown = () => {
+  localStorage.setItem(LAST_SHOWN_KEY, Date.now().toString());
+};
+
 export default function PwaInstallPrompt() {
   const { isMobile } = useIsMobile();
   const [deferredPrompt, setDeferredPrompt] =
@@ -25,8 +48,13 @@ export default function PwaInstallPrompt() {
 
     const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setOpen(true);
+
+      // Only show if 24 hours have passed
+      if (shouldShowPrompt()) {
+        setDeferredPrompt(e as BeforeInstallPromptEvent);
+        setOpen(true);
+        recordPromptShown(); // Record that we're showing it now
+      }
     };
 
     window.addEventListener("beforeinstallprompt", handler as EventListener);
@@ -47,12 +75,23 @@ export default function PwaInstallPrompt() {
 
   const onClose = () => setOpen(false);
 
+  // Handle background click
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Only close if clicking the background, not the content
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   const isIosMobile = useMemo(() => isIos() && isMobile, [isMobile]);
 
   if (!open || isStandalone()) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40">
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40"
+      onClick={handleBackgroundClick}
+    >
       <div className="w-full sm:max-w-sm sm:rounded-2xl bg-white text-gray-900 p-4 sm:p-6">
         <div className="flex items-center gap-3 mb-3">
           <img src="/icon-192.png" alt="app icon" className="w-8 h-8" />
