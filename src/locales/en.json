@@ -96,7 +96,7 @@
         "weekends": "Weekends",
         "pwaNotInstalled": {
             "title": "PWA Installation Required",
-            "message": "You need to install the app to use push notifications.",
+            "message": "You need to install the app to use push notifications. If you have installed the app, please open it.",
             "install": "Install App"
         },
         "permissionNeeded": {

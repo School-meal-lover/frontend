@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Modal from './Modal';
+import ManageHeader from '../Manage/ManageHeader';
 import { useMediaQuery } from 'react-responsive';
 import MobileFooter from '../Mobile/MobileFooter';
 import DesktopFooter from '../Desktop/DesktopFooter';
@@ -44,8 +45,13 @@ const UploadPage = () => {
 
   const isMobile = useMediaQuery({ maxWidth: 639 });
 
-  // Get next Monday as default
+  // Load bearer token from localStorage and get next Monday as default
   useEffect(() => {
+    const savedToken = localStorage.getItem('manage_bearer_token');
+    if (savedToken) {
+      setBearerToken(savedToken);
+    }
+
     const today = dayjs();
     const dayOfWeek = today.day(); // 0 = Sunday, 1 = Monday, ...
     let nextMonday;
@@ -109,6 +115,12 @@ const UploadPage = () => {
     }
 
     return days;
+  };
+
+  // Handle bearer token change
+  const handleTokenChange = (token: string) => {
+    setBearerToken(token);
+    localStorage.setItem('manage_bearer_token', token);
   };
 
   const mealTypes: MealType[] = ['Breakfast', 'Lunch_1', 'Lunch_2', 'Dinner'];
@@ -283,25 +295,7 @@ const UploadPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="relative bg-gradient-to-br from-[#F3E2D4] via-[#E6D1C2] to-[#D9C0B0] shadow-xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-transparent to-black/5"></div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/8 rounded-full -translate-y-32 translate-x-32 blur-2xl"></div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="text-center">
-            <div className="flex items-center justify-center mb-6">
-              <img src="/GRRRR.svg" alt="GRRRR Logo" className="h-14 w-14 mr-6 drop-shadow-lg" />
-              <h1 className="text-4xl font-bold text-white tracking-tight drop-shadow-lg">
-                GIST 학식 메뉴 등록
-              </h1>
-            </div>
-            <p className="text-xl text-[#8B4513] font-light tracking-wide">
-              주간 식단표를 업로드하세요
-            </p>
-          </div>
-        </div>
-      </header>
+      <ManageHeader bearerToken={bearerToken} onTokenChange={handleTokenChange} />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -420,37 +414,22 @@ const UploadPage = () => {
           )}
         </div>
 
-        {/* Bearer Token & Upload Button */}
-        <div className="max-w-2xl mx-auto space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Bearer Token *
-            </label>
-            <input
-              type="password"
-              value={bearerToken}
-              onChange={(e) => setBearerToken(e.target.value)}
-              placeholder="인증 토큰을 입력하세요"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            />
-          </div>
-
-          <div className="flex justify-center pt-4">
-            <button
-              onClick={handleUpload}
-              disabled={isUploading || weekExists || !weekStartDate || !bearerToken.trim()}
-              className="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl transform active:scale-95 disabled:cursor-not-allowed"
-            >
-              {isUploading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  <span>업로드 중...</span>
-                </>
-              ) : (
-                <span>식단 업로드</span>
-              )}
-            </button>
-          </div>
+        {/* Upload Button */}
+        <div className="flex justify-center pt-4">
+          <button
+            onClick={handleUpload}
+            disabled={isUploading || weekExists || !weekStartDate || !bearerToken.trim()}
+            className="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl transform active:scale-95 disabled:cursor-not-allowed"
+          >
+            {isUploading ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <span>업로드 중...</span>
+              </>
+            ) : (
+              <span>식단 업로드</span>
+            )}
+          </button>
         </div>
       </main>
 
@@ -607,7 +586,7 @@ const ManualInputArea = ({
       <div className="mb-4">
         <h3 className="text-xl font-bold text-gray-800">직접 입력</h3>
         <p className="text-sm text-gray-600 mt-2">
-          💡 각 칸에 메뉴를 한 줄에 하나씩 입력하세요 (엔터로 구분)
+          메뉴를 한 줄에 하나씩 입력하세요 (엔터로 구분)
         </p>
       </div>
 

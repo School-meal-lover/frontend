@@ -11,7 +11,6 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as UploadImport } from './routes/upload'
 import { Route as SettingsImport } from './routes/settings'
 import { Route as IntroduceImport } from './routes/introduce'
 import { Route as R404PageImport } from './routes/404Page'
@@ -19,14 +18,11 @@ import { Route as IndexImport } from './routes/index'
 import { Route as MenuLacklackImport } from './routes/menu/lacklack'
 import { Route as MenuCongestionImport } from './routes/menu/congestion'
 import { Route as MenuDateImport } from './routes/menu/$date'
+import { Route as ManageUploadImport } from './routes/manage.upload'
+import { Route as ManageSoldoutImport } from './routes/manage.soldout'
+import { Route as ManagePictureImport } from './routes/manage.picture'
 
 // Create/Update Routes
-
-const UploadRoute = UploadImport.update({
-  id: '/upload',
-  path: '/upload',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const SettingsRoute = SettingsImport.update({
   id: '/settings',
@@ -70,6 +66,24 @@ const MenuDateRoute = MenuDateImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ManageUploadRoute = ManageUploadImport.update({
+  id: '/manage/upload',
+  path: '/manage/upload',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ManageSoldoutRoute = ManageSoldoutImport.update({
+  id: '/manage/soldout',
+  path: '/manage/soldout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ManagePictureRoute = ManagePictureImport.update({
+  id: '/manage/picture',
+  path: '/manage/picture',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -102,11 +116,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsImport
       parentRoute: typeof rootRoute
     }
-    '/upload': {
-      id: '/upload'
-      path: '/upload'
-      fullPath: '/upload'
-      preLoaderRoute: typeof UploadImport
+    '/manage/picture': {
+      id: '/manage/picture'
+      path: '/manage/picture'
+      fullPath: '/manage/picture'
+      preLoaderRoute: typeof ManagePictureImport
+      parentRoute: typeof rootRoute
+    }
+    '/manage/soldout': {
+      id: '/manage/soldout'
+      path: '/manage/soldout'
+      fullPath: '/manage/soldout'
+      preLoaderRoute: typeof ManageSoldoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/manage/upload': {
+      id: '/manage/upload'
+      path: '/manage/upload'
+      fullPath: '/manage/upload'
+      preLoaderRoute: typeof ManageUploadImport
       parentRoute: typeof rootRoute
     }
     '/menu/$date': {
@@ -140,7 +168,9 @@ export interface FileRoutesByFullPath {
   '/404Page': typeof R404PageRoute
   '/introduce': typeof IntroduceRoute
   '/settings': typeof SettingsRoute
-  '/upload': typeof UploadRoute
+  '/manage/picture': typeof ManagePictureRoute
+  '/manage/soldout': typeof ManageSoldoutRoute
+  '/manage/upload': typeof ManageUploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
   '/menu/lacklack': typeof MenuLacklackRoute
@@ -151,7 +181,9 @@ export interface FileRoutesByTo {
   '/404Page': typeof R404PageRoute
   '/introduce': typeof IntroduceRoute
   '/settings': typeof SettingsRoute
-  '/upload': typeof UploadRoute
+  '/manage/picture': typeof ManagePictureRoute
+  '/manage/soldout': typeof ManageSoldoutRoute
+  '/manage/upload': typeof ManageUploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
   '/menu/lacklack': typeof MenuLacklackRoute
@@ -163,7 +195,9 @@ export interface FileRoutesById {
   '/404Page': typeof R404PageRoute
   '/introduce': typeof IntroduceRoute
   '/settings': typeof SettingsRoute
-  '/upload': typeof UploadRoute
+  '/manage/picture': typeof ManagePictureRoute
+  '/manage/soldout': typeof ManageSoldoutRoute
+  '/manage/upload': typeof ManageUploadRoute
   '/menu/$date': typeof MenuDateRoute
   '/menu/congestion': typeof MenuCongestionRoute
   '/menu/lacklack': typeof MenuLacklackRoute
@@ -176,7 +210,9 @@ export interface FileRouteTypes {
     | '/404Page'
     | '/introduce'
     | '/settings'
-    | '/upload'
+    | '/manage/picture'
+    | '/manage/soldout'
+    | '/manage/upload'
     | '/menu/$date'
     | '/menu/congestion'
     | '/menu/lacklack'
@@ -186,7 +222,9 @@ export interface FileRouteTypes {
     | '/404Page'
     | '/introduce'
     | '/settings'
-    | '/upload'
+    | '/manage/picture'
+    | '/manage/soldout'
+    | '/manage/upload'
     | '/menu/$date'
     | '/menu/congestion'
     | '/menu/lacklack'
@@ -196,7 +234,9 @@ export interface FileRouteTypes {
     | '/404Page'
     | '/introduce'
     | '/settings'
-    | '/upload'
+    | '/manage/picture'
+    | '/manage/soldout'
+    | '/manage/upload'
     | '/menu/$date'
     | '/menu/congestion'
     | '/menu/lacklack'
@@ -208,7 +248,9 @@ export interface RootRouteChildren {
   R404PageRoute: typeof R404PageRoute
   IntroduceRoute: typeof IntroduceRoute
   SettingsRoute: typeof SettingsRoute
-  UploadRoute: typeof UploadRoute
+  ManagePictureRoute: typeof ManagePictureRoute
+  ManageSoldoutRoute: typeof ManageSoldoutRoute
+  ManageUploadRoute: typeof ManageUploadRoute
   MenuDateRoute: typeof MenuDateRoute
   MenuCongestionRoute: typeof MenuCongestionRoute
   MenuLacklackRoute: typeof MenuLacklackRoute
@@ -219,7 +261,9 @@ const rootRouteChildren: RootRouteChildren = {
   R404PageRoute: R404PageRoute,
   IntroduceRoute: IntroduceRoute,
   SettingsRoute: SettingsRoute,
-  UploadRoute: UploadRoute,
+  ManagePictureRoute: ManagePictureRoute,
+  ManageSoldoutRoute: ManageSoldoutRoute,
+  ManageUploadRoute: ManageUploadRoute,
   MenuDateRoute: MenuDateRoute,
   MenuCongestionRoute: MenuCongestionRoute,
   MenuLacklackRoute: MenuLacklackRoute,
@@ -239,7 +283,9 @@ export const routeTree = rootRoute
         "/404Page",
         "/introduce",
         "/settings",
-        "/upload",
+        "/manage/picture",
+        "/manage/soldout",
+        "/manage/upload",
         "/menu/$date",
         "/menu/congestion",
         "/menu/lacklack"
@@ -257,8 +303,14 @@ export const routeTree = rootRoute
     "/settings": {
       "filePath": "settings.tsx"
     },
-    "/upload": {
-      "filePath": "upload.tsx"
+    "/manage/picture": {
+      "filePath": "manage.picture.tsx"
+    },
+    "/manage/soldout": {
+      "filePath": "manage.soldout.tsx"
+    },
+    "/manage/upload": {
+      "filePath": "manage.upload.tsx"
     },
     "/menu/$date": {
       "filePath": "menu/$date.tsx"
