@@ -96,7 +96,7 @@
         "weekends": "주말",
         "pwaNotInstalled": {
             "title": "PWA 설치 필요",
-            "message": "푸시 알림을 사용하려면 앱을 설치해야 합니다.",
+            "message": "푸시 알림을 사용하려면 앱을 설치해야 합니다. 설치하셨다면 앱으로 접속해주세요.",
             "install": "앱 설치하기"
         },
         "permissionNeeded": {

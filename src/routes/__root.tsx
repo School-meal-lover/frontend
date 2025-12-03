@@ -28,10 +28,10 @@ const RootLayout = () => {
   const { isMobile } = useIsMobile();
   const location = useLocation();
 
-  // upload 페이지에서는 헤더 제외
-  const isUploadPage = location.pathname === '/upload';
+  // manage 페이지에서는 헤더 제외
+  const isManagePage = location.pathname.startsWith('/manage');
 
-  if (isUploadPage) {
+  if (isManagePage) {
     return <Outlet />;
   }
 
