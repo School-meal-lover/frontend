@@ -68,6 +68,9 @@
         "toast": "Toast & Jam",
         "salad": "Vegetable Salad*D"
     },
+    "button": {
+        "today": "Today"
+    },
     "notFound": {
         "title": "404",
         "message": "Page Not Found",
@@ -75,9 +78,11 @@
     },
     "settings": {
         "title": "Settings",
-        "language": "Language",
+        "language": "Language/언어",
         "korean": "한글",
-        "english": "English"
+        "english": "English",
+        "languageNotice": "Your language preference is saved automatically and will be remembered on your next visit.",
+        "untranslatedNotice": "Some words or sentences may not be translated and will be displayed in Korean."
     },
     "notifications": {
         "title": "Push Notifications",

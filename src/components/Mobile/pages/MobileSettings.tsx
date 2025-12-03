@@ -9,6 +9,7 @@ import {
     showInstallPrompt,
     getDeferredPrompt,
     getNotificationHelpUrl,
+    sendTestNotification,
 } from '../../../utils/pwaUtils';
 
 export default function MobileSettings() {
@@ -101,13 +102,13 @@ export default function MobileSettings() {
                     </h2>
 
                     {/* 토글 버튼 */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-4">
                         <div className="flex gap-2 w-full">
                             <button
                                 onClick={() => handleLanguageChange('ko')}
                                 className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all duration-200 ${currentLanguage === 'ko'
-                                        ? 'bg-orange-500 text-white shadow-md'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    ? 'bg-orange-500 text-white shadow-md'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                     }`}
                             >
                                 {t('settings.korean')}
@@ -115,13 +116,21 @@ export default function MobileSettings() {
                             <button
                                 onClick={() => handleLanguageChange('en')}
                                 className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all duration-200 ${currentLanguage === 'en'
-                                        ? 'bg-orange-500 text-white shadow-md'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    ? 'bg-orange-500 text-white shadow-md'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                     }`}
                             >
                                 {t('settings.english')}
                             </button>
                         </div>
+                    </div>
+
+                    {/* 언어 설정 안내 */}
+                    <div className="text-sm text-gray-600 space-y-1">
+                        <p>{t('settings.languageNotice')}</p>
+                        {currentLanguage === 'en' && (
+                            <p>{t('settings.untranslatedNotice')}</p>
+                        )}
                     </div>
                 </div>
 
@@ -276,13 +285,6 @@ export default function MobileSettings() {
                         </div>
                     )}
                 </div>
-
-                {/* 설명 텍스트 */}
-                <p className="text-sm text-gray-500 px-2">
-                    {currentLanguage === 'ko'
-                        ? '선택한 언어는 자동으로 저장되며, 다음 방문 시에도 유지됩니다.'
-                        : 'Your language preference is saved automatically and will be remembered on your next visit.'}
-                </p>
             </div>
         </div>
     );
