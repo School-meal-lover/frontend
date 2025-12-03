@@ -31,8 +31,19 @@ export default function PWAInstallModal({ onClose }: PWAInstallModalProps) {
         onClose();
     };
 
+    // Handle background click
+    const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        // Only close if clicking the background, not the content
+        if (e.target === e.currentTarget) {
+            handleDecline();
+        }
+    };
+
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+            onClick={handleBackgroundClick}
+        >
             <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8 pwa-install-modal-fade-in">
                 {/* 아이콘 */}
                 <div className="flex justify-center mb-4">
