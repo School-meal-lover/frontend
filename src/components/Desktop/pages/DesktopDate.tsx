@@ -90,7 +90,7 @@ const getWeekDates = (baseDate: Date, weekOffset: number = 0): Date[] => {
   monday.setDate(baseDate.getDate() - (day === 0 ? 6 : day - 1) + weekOffset * 7);
 
   const weekDates = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 7; i++) {
     const d = new Date(monday);
     d.setDate(monday.getDate() + i);
     weekDates.push(d);
@@ -124,7 +124,7 @@ function DateNevigator({ baseDate, weekOffset, setWeekOffset }: DateNavigatorPro
   const { t, i18n } = useTranslation();
   const weekDates = getWeekDates(baseDate, weekOffset);
   const monday = weekDates[0];
-  const friday = weekDates[4];
+  const sunday = weekDates[6];
   const navigate = useNavigate();
   dayjs.locale(i18n.language === 'ko' ? 'ko' : 'en');
 
@@ -151,7 +151,7 @@ function DateNevigator({ baseDate, weekOffset, setWeekOffset }: DateNavigatorPro
       <img className="hover:brightness-95 transition" alt="leftArrow" src="../leftArrow.svg"
         onClick={() => handleWeekChange(-1)} />
       <span className="text-2xl font-bold min-w-[320px] text-center">
-        {formatDate(monday)} - {i18n.language === 'ko' ? `${monday.getMonth() === friday.getMonth() ? '' : `${friday.getMonth() + 1}월 `}${friday.getDate()}일` : `${monday.getMonth() === friday.getMonth() ? '' : `${friday.getMonth() + 1}/`}${friday.getDate()}`}
+        {formatDate(monday)} - {i18n.language === 'ko' ? `${monday.getMonth() === sunday.getMonth() ? '' : `${sunday.getMonth() + 1}월 `}${sunday.getDate()}일` : `${monday.getMonth() === sunday.getMonth() ? '' : `${sunday.getMonth() + 1}/`}${sunday.getDate()}`}
       </span>
       <img className="hover:brightness-95 transition" alt="rightArrow" src="../rightArrow.svg"
         onClick={() => handleWeekChange(1)} />
@@ -178,13 +178,15 @@ function DateSelector({ baseDate, weekOffset }: DateSelectorProps) {
     return dayjs(date).format("DD")
   }
 
-  //월~금 객체 배열
+  //월~일 객체 배열
   const days = [
     { date: weekDates[0], day: i18n.language === 'ko' ? "월" : "Mon" },
     { date: weekDates[1], day: i18n.language === 'ko' ? "화" : "Tue" },
     { date: weekDates[2], day: i18n.language === 'ko' ? "수" : "Wed" },
     { date: weekDates[3], day: i18n.language === 'ko' ? "목" : "Thu" },
     { date: weekDates[4], day: i18n.language === 'ko' ? "금" : "Fri" },
+    { date: weekDates[5], day: i18n.language === 'ko' ? "토" : "Sat" },
+    { date: weekDates[6], day: i18n.language === 'ko' ? "일" : "Sun" },
   ]
 
   const handleDayChange = (date: Date) => {
@@ -196,7 +198,7 @@ function DateSelector({ baseDate, weekOffset }: DateSelectorProps) {
 
   return (
     <div className="m-4 flex justify-center items-center">
-      <div className="flex rounded-[12px] border border-[#B7B7B7] w-[432px] h-[102px] gap-2 bg-white">
+      <div className="flex rounded-[12px] border border-[#B7B7B7] w-[604px] h-[102px] gap-2 bg-white">
         {days.map((day) => (
           <div
             key={formatDate(day.date)}
