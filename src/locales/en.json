@@ -68,6 +68,9 @@
         "toast": "Toast & Jam",
         "salad": "Vegetable Salad*D"
     },
+    "button": {
+        "today": "Today"
+    },
     "notFound": {
         "title": "404",
         "message": "Page Not Found",

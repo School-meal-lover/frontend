@@ -89,9 +89,17 @@ export default function MobileDate({ date }: Props) {
     setBaseDate(dayjs(date).toDate());
   }, [date])
 
+  const navigate = useNavigate();
+
+  const handleTodayClick = () => {
+    const today = dayjs().format("YYYY-MM-DD");
+    navigate({ to: "/menu/$date", params: { date: today } });
+  };
+
   return (
     <div className="bg-[#F8F4F1] p-5 min-w-[300px] min-h-screen">
       <DateNevigator baseDate={baseDate} setBaseDate={setBaseDate} />
+      <TodayButton onClick={handleTodayClick} />
       <MenuDisplay date={date} />
     </div>
   )
@@ -127,6 +135,27 @@ function DateNevigator({ baseDate, setBaseDate }: DateNavigatorProps) {
         onClick={() => handleDayChange(1)} />
     </div>
   )
+}
+
+//-----------------------------🔥TodayButton🔥-----------------------------
+// Navigate to today's date
+interface TodayButtonProps {
+  onClick: () => void;
+}
+
+function TodayButton({ onClick }: TodayButtonProps) {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex justify-center items-center my-4 mx-5">
+      <button
+        onClick={onClick}
+        className="px-6 py-2 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-semibold rounded-lg transition-colors duration-200 shadow-md"
+      >
+        {t('button.today')}
+      </button>
+    </div>
+  );
 }
 
 //-----------------------------🔥MenuDisplay🔥-----------------------------

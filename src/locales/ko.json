@@ -68,6 +68,9 @@
         "toast": "토스트*잼",
         "salad": "야채샐러드*D"
     },
+    "button": {
+        "today": "오늘"
+    },
     "notFound": {
         "title": "404",
         "message": "페이지를 찾을 수 없습니다",
