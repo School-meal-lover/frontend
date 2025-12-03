@@ -75,9 +75,11 @@
     },
     "settings": {
         "title": "설정",
-        "language": "언어",
+        "language": "언어/Language",
         "korean": "한글",
-        "english": "English"
+        "english": "English",
+        "languageNotice": "선택한 언어는 자동으로 저장되며, 다음 방문 시에도 유지됩니다.",
+        "untranslatedNotice": "일부 단어나 문장은 번역되지 않았을 수 있습니다. 이 경우 한글로 표시됩니다."
     },
     "notifications": {
         "title": "푸시 알림",

@@ -117,3 +117,64 @@ export async function showInstallPrompt(): Promise<boolean> {
 
     return outcome === 'accepted';
 }
+
+/**
+ * 테스트 푸시 알림 전송 (디버그용)
+ */
+export async function sendTestNotification(delaySeconds: number = 0): Promise<boolean> {
+    console.log('🔔 sendTestNotification 호출됨, delay:', delaySeconds);
+
+    if (!('serviceWorker' in navigator) || !('Notification' in window)) {
+        alert('❌ 이 브라우저는 알림을 지원하지 않습니다.');
+        console.warn('Notifications not supported');
+        return false;
+    }
+
+    // 알림 권한 확인 및 요청
+    let permission = Notification.permission;
+    console.log('현재 알림 권한:', permission);
+
+    if (permission === 'default') {
+        console.log('알림 권한 요청 중...');
+        permission = await Notification.requestPermission();
+        console.log('알림 권한 요청 결과:', permission);
+    }
+
+    if (permission !== 'granted') {
+        alert('❌ 알림 권한이 필요합니다. 브라우저 설정에서 알림을 허용해주세요.');
+        console.warn('Notification permission not granted:', permission);
+        return false;
+    }
+
+    try {
+        console.log('Service Worker 확인 중...');
+        const registration = await navigator.serviceWorker.ready;
+        console.log('✅ Service Worker 준비됨:', registration);
+
+        alert(`✅ ${delaySeconds}초 후 테스트 알림이 전송됩니다!`);
+
+        // 지연 후 알림 표시
+        setTimeout(async () => {
+            console.log('알림 전송 시작...');
+            try {
+                await registration.showNotification('🍽️ 꼬르륵 테스트 알림', {
+                    body: '푸시 알림이 정상적으로 작동합니다!',
+                    icon: '/icon-192.png',
+                    badge: '/icon-144.png',
+                    tag: 'test-notification',
+                    requireInteraction: false,
+                });
+                console.log('✅ showNotification 호출 완료');
+            } catch (notifError) {
+                console.error('❌ showNotification 오류:', notifError);
+                alert('❌ 알림 표시 실패: ' + notifError);
+            }
+        }, delaySeconds * 1000);
+
+        return true;
+    } catch (error) {
+        alert('❌ 알림 전송 중 오류가 발생했습니다: ' + error);
+        console.error('Error sending test notification:', error);
+        return false;
+    }
+}
